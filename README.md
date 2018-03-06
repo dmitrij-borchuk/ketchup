@@ -18,3 +18,9 @@ yarn run test
 yarn install
 yarn run Lint
 ```
+
+### Storybook
+```
+yarn install
+yarn run storybook
+```
