@@ -9,9 +9,11 @@
     "dev": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "lint": "eslint --ext .js,.jsx ./client",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "start-storybook -p 9001 -c ./client/.storybook"
   },
   "dependencies": {
+    "@storybook/react": "^3.3.14",
     "babel-core": "^6.26.0",
     "babel-jest": "^22.4.1",
     "babel-loader": "^7.1.4",
