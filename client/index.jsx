@@ -1,10 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Hello from './components/hello';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
+import App from './components/App';
+
+const store = createStore(reducers);
 
 // eslint-disable-next-line no-undef
 const root = document.getElementById('root');
-ReactDOM.render(
-  <Hello name="Taylor" />,
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
   root,
 );
