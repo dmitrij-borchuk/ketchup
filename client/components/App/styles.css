@@ -1,0 +1,30 @@
+:global #root, :global body, :global html {
+  height: 100%;
+}
+
+.app {
+  align-items: center;
+  background: #f44336;
+  color: #fff;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  justify-content: center;
+}
+
+.circle {
+  align-items: center;
+  border: 3px solid #b71c1c;
+  border-radius: 50%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  height: 90vmin;
+  width: 90vmin;
+}
+
+.controls {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
