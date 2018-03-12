@@ -3,7 +3,9 @@
   "globals": {
     "describe": true,
     "it": true,
-    "expect": true
+    "expect": true,
+    "jest": true,
+    "afterEach": true
   },
   "rules": {
     "function-paren-newline": [
