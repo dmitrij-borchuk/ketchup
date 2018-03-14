@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import Timer from '../Timer/container';
 import TimerControls from '../TimerControls/container';
 import styles from './styles.css';
-
 import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png';
 import favicon32x32 from '../../assets/favicon/favicon-32x32.png';
 import favicon16x16 from '../../assets/favicon/favicon-16x16.png';
