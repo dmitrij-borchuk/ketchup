@@ -39,7 +39,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(webmanifest)$/i,
+        test: /\.(webmanifest|mp3)$/i,
         use: {
           loader: 'file-loader',
         },
