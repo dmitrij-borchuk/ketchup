@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from './styles.css';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  font-size: 5rem;
+`;
 
 const secondsInMinute = 60;
 export default function Timer(props) {
@@ -13,9 +17,9 @@ export default function Timer(props) {
   const lastSecondsString = lastSeconds.toString().padStart(2, '0');
 
   return (
-    <div className={css.timer}>
+    <Container>
       {minutesString}:{lastSecondsString}
-    </div>
+    </Container>
   );
 }
 
