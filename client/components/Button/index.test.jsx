@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, render } from 'enzyme';
 import Component from './index';
 
 describe('Button component', () => {
   it('should render text', () => {
     const text = 'ButtonText';
 
-    const rendered = shallow(
+    const rendered = render(
       <Component>
         {text}
       </Component>,

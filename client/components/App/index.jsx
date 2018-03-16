@@ -1,17 +1,42 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 import Timer from '../Timer/container';
 import TimerControls from '../TimerControls/container';
-import styles from './styles.css';
 import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png';
 import favicon32x32 from '../../assets/favicon/favicon-32x32.png';
 import favicon16x16 from '../../assets/favicon/favicon-16x16.png';
 import webmanifest from '../../assets/favicon/site.webmanifest';
 import safariPinnedTab from '../../assets/favicon/safari-pinned-tab.svg';
 
+const AppWrapper = styled.div`
+  align-items: center;
+  background: #f44336;
+  color: #fff;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  justify-content: center;
+`;
+const Circle = styled.div`
+  align-items: center;
+  border: 3px solid #b71c1c;
+  border-radius: 50%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  height: 90vmin;
+  width: 90vmin;
+`;
+const Controls = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
+
 export default function App() {
   return (
-    <div className={styles.app}>
+    <AppWrapper>
       <Helmet>
         {/* Favicon */}
         <link rel="apple-touch-icon" sizes="144x144" href={appleTouchIcon} />
@@ -22,15 +47,15 @@ export default function App() {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Helmet>
-      <div className={styles.circle}>
+      <Circle>
         <div>
           <Timer />
-          <div className={styles.controls}>
+          <Controls>
             <TimerControls />
-          </div>
+          </Controls>
         </div>
-      </div>
-    </div>
+      </Circle>
+    </AppWrapper>
   );
 }
 

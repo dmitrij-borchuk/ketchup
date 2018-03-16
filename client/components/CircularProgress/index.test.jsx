@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Component from './index';
 
 describe('Circular progress', () => {
-  it('should render content', () => {
+  xit('should render content', () => {
     const text = 'ButtonText';
     const item = <React.Component />;
 
