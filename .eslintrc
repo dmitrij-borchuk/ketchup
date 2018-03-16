@@ -3,9 +3,11 @@
   "globals": {
     "describe": true,
     "it": true,
+    "xit": true,
     "expect": true,
     "jest": true,
-    "afterEach": true
+    "afterEach": true,
+    "Audio": true
   },
   "rules": {
     "function-paren-newline": [

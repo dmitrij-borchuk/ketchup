@@ -106,6 +106,11 @@ describe('Timer actions', () => {
     expect(dispatchMock.mock.calls.length).toEqual(callsCount);
   });
   it('after reaching 0 timer should stop', () => {
+    const Audio = function Audio() {
+      this.play = () => {};
+    };
+    /* eslint-disable-next-line no-undef */
+    window.Audio = Audio;
     jest.useFakeTimers();
 
     const state = {
@@ -124,6 +129,61 @@ describe('Timer actions', () => {
 
     const actionCall = getFirstCallForActionType(dispatchMock, STOP_TIMER);
     expect(actionCall).toBeDefined();
+
+    const dispatchCalls = dispatchMock.mock.calls.length;
+    jest.advanceTimersByTime(msInSec * 1);
+    expect(dispatchMock.mock.calls.length).toEqual(dispatchCalls);
+  });
+  it('sound should play if timer reached 0', () => {
+    const playMock = jest.fn();
+    const Audio = function Audio() {
+      this.play = playMock;
+    };
+    /* eslint-disable-next-line no-undef */
+    window.Audio = Audio;
+    jest.useFakeTimers();
+
+    const state = {
+      timer: {
+        seconds: 1,
+        isStarted: false,
+      },
+    };
+    const dispatchMock = jest.fn();
+    const dispatch = createDispatch(state, dispatchMock);
+    const msInSec = 1000;
+
+    startTimer()(dispatch, () => state);
+    state.timer.seconds -= 1;
+    jest.advanceTimersByTime(msInSec * 1);
+
+    expect(playMock.mock.calls.length).toEqual(1);
+  });
+  it('sound shouldn`t play if timer if it is reset', () => {
+    const playMock = jest.fn();
+    const Audio = function Audio() {
+      this.play = playMock;
+    };
+    /* eslint-disable-next-line no-undef */
+    window.Audio = Audio;
+    jest.useFakeTimers();
+
+    const state = {
+      timer: {
+        seconds: 1,
+        isStarted: false,
+      },
+    };
+    const dispatchMock = jest.fn();
+    const dispatch = createDispatch(state, dispatchMock);
+    const msInSec = 1000;
+
+    startTimer()(dispatch, () => state);
+    state.timer.seconds -= 1;
+    resetTimer()(dispatch, () => state);
+    jest.advanceTimersByTime(msInSec * 1);
+
+    expect(playMock.mock.calls.length).toEqual(0);
   });
 
   afterEach(() => jest.clearAllTimers());

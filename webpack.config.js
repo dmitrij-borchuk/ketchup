@@ -19,13 +19,8 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-            },
-          },
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
         ],
       },
       {
@@ -37,6 +32,24 @@ module.exports = {
             presets: ['babel-preset-env', 'react'],
           },
         },
+      },
+      {
+        test: /\.(webmanifest|mp3)$/i,
+        use: {
+          loader: 'file-loader',
+        },
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+            },
+          },
+        ],
       },
     ],
   },

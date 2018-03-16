@@ -1,25 +1,39 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import styled from 'styled-components';
 import Button from '../components/Button';
+
+const Container = styled.div`
+  background: red;
+  padding: 20px;
+`;
 
 storiesOf('Button', module)
   .add('default', () => (
-    <Button />
+    <Container>
+      <Button />
+    </Container>
   ))
   .add('With text', () => (
-    <Button>
-      Button text
-    </Button>
+    <Container>
+      <Button>
+        Button text
+      </Button>
+    </Container>
   ))
   .add('With callback', () => (
-    <Button onClick={action('Clicked')}>
-      Button text
-    </Button>
+    <Container>
+      <Button onClick={action('Clicked')}>
+        Button text
+      </Button>
+    </Container>
   ))
   .add('with very long', () => (
-    <Button>
-      {/* eslint-disable-next-line max-len */}
-      Button with very long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long text
-    </Button>
+    <Container>
+      <Button>
+        {/* eslint-disable-next-line max-len */}
+        Button with very long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long text
+      </Button>
+    </Container>
   ));
