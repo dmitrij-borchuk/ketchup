@@ -8,6 +8,6 @@ module.exports = {
     '!**/client/index.jsx',
   ],
   moduleNameMapper: {
-    '\\.(css|png|webmanifest|svg|mp3)$': 'identity-obj-proxy',
+    '\\.(png|webmanifest|svg|mp3)$': 'identity-obj-proxy',
   },
 };

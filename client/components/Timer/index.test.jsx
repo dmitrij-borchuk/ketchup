@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from 'enzyme';
 import Component from './index';
 
 const secondsInMinute = 60;
@@ -11,7 +11,7 @@ describe('Timer component', () => {
     const seconds = 59;
     const allSeconds = (minutes * secondsInMinute) + seconds;
 
-    const rendered = shallow(
+    const rendered = render(
       <Component
         seconds={allSeconds}
       />,
@@ -24,7 +24,7 @@ describe('Timer component', () => {
     const seconds = 59;
     const allSeconds = (minutes * secondsInMinute) + seconds;
 
-    const rendered = shallow(
+    const rendered = render(
       <Component
         seconds={allSeconds}
       />,
@@ -37,7 +37,7 @@ describe('Timer component', () => {
     const seconds = 1;
     const allSeconds = (minutes * secondsInMinute) + seconds;
 
-    const rendered = shallow(
+    const rendered = render(
       <Component
         seconds={allSeconds}
       />,

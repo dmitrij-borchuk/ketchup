@@ -1,7 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
-import css from './styles.css';
+import styled, { css } from 'styled-components';
+
+const getStyleByType = (type) => {
+  const map = {
+    PRIMARY: css`
+      background: none;
+      color: #fff;
+      &:hover {
+        background: #b71c1c;
+      }
+    `,
+  };
+  return map[type];
+};
+const Container = styled.button`
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: background-color 0.2s ease;
+  ${props => getStyleByType(props.type)}
+`;
 
 export default function Button(props) {
   const {
@@ -9,15 +28,14 @@ export default function Button(props) {
     onClick,
     type,
   } = props;
-  const className = cn(css.button, css[type.toLowerCase()]);
 
   return (
-    <button
-      className={className}
+    <Container
       onClick={onClick}
+      type={type}
     >
       {children}
-    </button>
+    </Container>
   );
 }
 Button.TYPES = {
