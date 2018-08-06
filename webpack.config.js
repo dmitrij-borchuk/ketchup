@@ -1,14 +1,26 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = {
-  entry: './client/index.jsx',
+  entry: ['babel-polyfill', './client/index.jsx'],
   output: {
     path: path.resolve(__dirname, 'docs'),
     filename: 'bundle.js',
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './client/index.html' }),
+    new HtmlWebpackPlugin({
+      template: './client/index.html',
+    }),
+    new SWPrecacheWebpackPlugin(
+      {
+        cacheId: 'ketchup',
+        filename: 'serviceWorker.js',
+        minify: true,
+        navigateFallback: '/index.html',
+        staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+      },
+    ),
   ],
   devtool: 'source-map',
   resolve: {
@@ -28,9 +40,6 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['babel-preset-env', 'react'],
-          },
         },
       },
       {

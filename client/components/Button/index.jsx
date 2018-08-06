@@ -1,38 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
-
-const getStyleByType = (type) => {
-  const map = {
-    PRIMARY: css`
-      background: none;
-      color: #fff;
-      &:hover {
-        background: #b71c1c;
-      }
-    `,
-  };
-  return map[type];
-};
-const Container = styled.button`
-  border: none;
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: background-color 0.2s ease;
-  ${props => getStyleByType(props.type)}
-`;
+import { Container } from './styles';
 
 export default function Button(props) {
   const {
     children,
     onClick,
     type,
+    modifier,
   } = props;
 
   return (
     <Container
       onClick={onClick}
       type={type}
+      modifier={modifier}
     >
       {children}
     </Container>
@@ -40,6 +22,10 @@ export default function Button(props) {
 }
 Button.TYPES = {
   PRIMARY: 'PRIMARY',
+};
+Button.MODIFIERS = {
+  LIGHT: 'LIGHT',
+  DARK: 'DARK',
 };
 
 Button.propTypes = {
@@ -51,10 +37,15 @@ Button.propTypes = {
   type: PropTypes.oneOf([
     Button.TYPES.PRIMARY,
   ]),
+  modifier: PropTypes.oneOf([
+    Button.MODIFIERS.LIGHT,
+    Button.MODIFIERS.DARK,
+  ]),
 };
 
 Button.defaultProps = {
   children: '',
   onClick: () => {},
   type: Button.TYPES.PRIMARY,
+  modifier: Button.MODIFIERS.LIGHT,
 };

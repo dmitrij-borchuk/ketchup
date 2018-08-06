@@ -1,40 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import styled from 'styled-components';
 import Timer from '../Timer/container';
+import Settings from '../Settings/container';
+import SettingsIcon from '../Icons/settings';
 import TimerControls from '../TimerControls/container';
 import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png';
 import favicon32x32 from '../../assets/favicon/favicon-32x32.png';
 import favicon16x16 from '../../assets/favicon/favicon-16x16.png';
 import webmanifest from '../../assets/favicon/site.webmanifest';
 import safariPinnedTab from '../../assets/favicon/safari-pinned-tab.svg';
+import {
+  AppWrapper,
+  Circle,
+  Controls,
+  SettingsIconWrapper,
+} from './styles';
 
-const AppWrapper = styled.div`
-  align-items: center;
-  background: #f44336;
-  color: #fff;
-  display: flex;
-  font-family: 'Roboto', sans-serif;
-  height: 100%;
-  justify-content: center;
-`;
-const Circle = styled.div`
-  align-items: center;
-  border: 3px solid #b71c1c;
-  border-radius: 50%;
-  display: flex;
-  box-sizing: border-box;
-  justify-content: center;
-  height: 90vmin;
-  width: 90vmin;
-`;
-const Controls = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
+export default function App(props) {
+  const {
+    showSettings,
+    settingsPopupShown,
+  } = props;
 
-export default function App() {
   return (
     <AppWrapper>
       <Helmet>
@@ -47,6 +35,16 @@ export default function App() {
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Helmet>
+
+      {/* Settings btn */}
+      <SettingsIconWrapper>
+        <SettingsIcon
+          color="#fff"
+          onClick={showSettings}
+        />
+      </SettingsIconWrapper>
+
+      {/* Timer */}
       <Circle>
         <div>
           <Timer />
@@ -55,11 +53,19 @@ export default function App() {
           </Controls>
         </div>
       </Circle>
+
+      {/* Settings */}
+      {settingsPopupShown &&
+        <Settings />
+      }
+
     </AppWrapper>
   );
 }
 
 App.propTypes = {
+  showSettings: PropTypes.func.isRequired,
+  settingsPopupShown: PropTypes.bool.isRequired,
 };
 
 App.defaultProps = {
