@@ -1,9 +1,13 @@
 import { SECONDS_IN_SESSION } from '../constants';
-import { createDispatch } from '../testHelpers';
+import {
+  createDispatch,
+  createStoreMock,
+} from '../testHelpers';
 
 import {
   setTimer,
   SET_TIMER,
+  RESET_TIMER,
   resetTimer,
   STOP_TIMER,
   startTimer,
@@ -29,20 +33,38 @@ describe('Timer actions', () => {
   });
   it('`resetTimer` action should set seconds to max value', () => {
     const dispatchMock = jest.fn();
-    resetTimer()(dispatchMock);
-    const actionCall = dispatchMock.mock.calls.filter(call => call[0].type === SET_TIMER)[0];
+    const getStateMock = createStoreMock({
+      app: {
+        settings: {},
+      },
+    });
+    resetTimer()(dispatchMock, getStateMock.getState);
+    const actionCall = dispatchMock.mock.calls.filter(call => call[0].type === RESET_TIMER)[0];
 
-    expect(actionCall[0]).toEqual({ type: SET_TIMER, payload: SECONDS_IN_SESSION });
+    expect(actionCall[0]).toEqual({
+      type: RESET_TIMER,
+      payload: {
+        seconds: SECONDS_IN_SESSION,
+      },
+    });
   });
   it('`resetTimer` action should stop timer', () => {
     const dispatchMock = jest.fn();
-    resetTimer()(dispatchMock);
-    const actionCall = dispatchMock.mock.calls.filter(call => call[0].type === STOP_TIMER)[0];
+    const getStateMock = createStoreMock({
+      app: {
+        settings: {},
+      },
+    });
+    resetTimer()(dispatchMock, getStateMock.getState);
+    const actionCall = dispatchMock.mock.calls.filter(call => call[0].type === RESET_TIMER)[0];
 
-    expect(actionCall[0]).toEqual({ type: STOP_TIMER });
+    expect(actionCall[0].type).toEqual(RESET_TIMER);
   });
   it('`startTimer` action should set max time for timer if time is 00:00', () => {
     const state = {
+      app: {
+        settings: {},
+      },
       timer: {
         seconds: 0,
       },
@@ -52,8 +74,10 @@ describe('Timer actions', () => {
 
     startTimer()(dispatch, () => state);
 
-    const actionCall = getFirstCallForActionType(dispatchMock, SET_TIMER);
-    expect(actionCall[0].payload).toEqual(SECONDS_IN_SESSION);
+    const actionCall = getFirstCallForActionType(dispatchMock, RESET_TIMER);
+    expect(actionCall[0].payload).toEqual({
+      seconds: SECONDS_IN_SESSION,
+    });
   });
   it('if timer is started it should count seconds from max to 0', () => {
     jest.useFakeTimers();
@@ -159,7 +183,7 @@ describe('Timer actions', () => {
 
     expect(playMock.mock.calls.length).toEqual(1);
   });
-  it('sound shouldn`t play if timer if it is reset', () => {
+  it('sound shouldn\'t play if timer is reset', () => {
     const playMock = jest.fn();
     const Audio = function Audio() {
       this.play = playMock;
@@ -172,6 +196,9 @@ describe('Timer actions', () => {
       timer: {
         seconds: 1,
         isStarted: false,
+      },
+      app: {
+        settings: {},
       },
     };
     const dispatchMock = jest.fn();

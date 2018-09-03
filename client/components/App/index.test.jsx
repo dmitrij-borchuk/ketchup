@@ -3,10 +3,15 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Component from './index';
 
+jest.mock('../Settings/container');
+
 describe('App component', () => {
   it('should render application', () => {
     const rendered = shallow(
-      <Component />,
+      <Component
+        showSettings={() => {}}
+        settingsPopupShown={false}
+      />,
     );
 
     expect(rendered.length).toEqual(1);

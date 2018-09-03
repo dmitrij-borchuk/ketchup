@@ -1,7 +1,9 @@
 
 import React from 'react';
+import { Provider } from 'react-redux';
 import { render } from 'enzyme';
 import Component from './index';
+import { createStoreMock } from '../../testHelpers';
 
 describe('Settings component', () => {
   it('should render label text', () => {
@@ -10,16 +12,21 @@ describe('Settings component', () => {
       type: 'number',
       key: 'sesLength',
     };
+    const storeMock = createStoreMock({});
 
     const rendered = render(
-      <Component
-        inputs={[input]}
-        values={{
-          sesLength: 5,
-        }}
-      />,
+      <Provider store={storeMock}>
+        <Component
+          inputs={[input]}
+          initialValues={{
+            sesLength: 5,
+          }}
+        />
+      </Provider>,
     );
 
-    expect(rendered.text()).toEqual(input.label);
+    const label = rendered.find('label');
+
+    expect(label.text()).toEqual(input.label);
   });
 });
