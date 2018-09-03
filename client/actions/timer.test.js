@@ -142,6 +142,9 @@ describe('Timer actions', () => {
         seconds: 1,
         isStarted: false,
       },
+      app: {
+        settings: {},
+      },
     };
     const dispatchMock = jest.fn();
     const dispatch = createDispatch(state, dispatchMock);
@@ -171,6 +174,11 @@ describe('Timer actions', () => {
       timer: {
         seconds: 1,
         isStarted: false,
+      },
+      app: {
+        settings: {
+          playSound: true,
+        },
       },
     };
     const dispatchMock = jest.fn();
