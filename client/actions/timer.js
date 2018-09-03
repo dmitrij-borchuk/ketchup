@@ -47,7 +47,9 @@ export const startTimer = () => (dispatch, getState) => {
     const newSeconds = currentState.timer.seconds - 1;
     if (newSeconds <= 0) {
       dispatch(stopTimer());
-      playSound(alarmSound);
+      if (currentState.app.settings[SETTINGS_KEYS.PLAY_SOUND]) {
+        playSound(alarmSound);
+      }
     } else {
       timeout = setTimeout(updateTimer, msInSec);
     }

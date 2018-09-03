@@ -11,20 +11,24 @@ import * as timerActions from '../../actions/timer';
 import {
   LOCAL_STORAGE_KEYS,
   SETTINGS_KEYS,
+  INPUT_TYPES,
 } from '../../constants';
 
-const INPUT_TYPES = {
-  NUMBER: 'number',
-};
 const inputs = [
   {
     label: 'Session length (sec)',
     type: INPUT_TYPES.NUMBER,
     key: SETTINGS_KEYS.SES_LENGTH,
   },
+  {
+    label: 'Play sound',
+    type: INPUT_TYPES.CHECKBOX,
+    key: SETTINGS_KEYS.PLAY_SOUND,
+  },
 ];
 const parsers = {
   [INPUT_TYPES.NUMBER]: value => parseInt(value, 10),
+  [INPUT_TYPES.CHECKBOX]: value => value,
 };
 
 class SettingsContainer extends PureComponent {

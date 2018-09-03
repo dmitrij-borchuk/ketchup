@@ -11,6 +11,7 @@ import {
 const defaultState = {
   settings: {
     [SETTINGS_KEYS.SES_LENGTH]: SECONDS_IN_SESSION,
+    [SETTINGS_KEYS.PLAY_SOUND]: true,
   },
   settingsPopupShown: false,
 };
@@ -30,7 +31,10 @@ export default function (state = defaultState, action) {
     case SET_SETTINGS:
       return {
         ...state,
-        settings: action.payload,
+        settings: {
+          ...state.settings,
+          ...action.payload,
+        },
       };
     default:
       return state;
