@@ -8,6 +8,7 @@ export default function Button(props) {
     onClick,
     type,
     modifier,
+    large,
   } = props;
 
   return (
@@ -15,14 +16,17 @@ export default function Button(props) {
       onClick={onClick}
       type={type}
       modifier={modifier}
+      large={large}
     >
       {children}
     </Container>
   );
 }
+
 Button.TYPES = {
   PRIMARY: 'PRIMARY',
 };
+
 Button.MODIFIERS = {
   LIGHT: 'LIGHT',
   DARK: 'DARK',
@@ -41,6 +45,7 @@ Button.propTypes = {
     Button.MODIFIERS.LIGHT,
     Button.MODIFIERS.DARK,
   ]),
+  large: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -48,4 +53,5 @@ Button.defaultProps = {
   onClick: () => {},
   type: Button.TYPES.PRIMARY,
   modifier: Button.MODIFIERS.LIGHT,
+  large: false,
 };

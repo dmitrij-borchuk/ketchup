@@ -40,4 +40,5 @@ export const Container = styled.button`
   transition: background-color 0.2s ease;
   ${props => getStyleByType(props.type)}
   ${props => getStyleByModifier(props.modifier)}
+  ${props => (props.large ? 'font-size: 180%;' : '')}
 `;
