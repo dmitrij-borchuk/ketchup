@@ -29,9 +29,11 @@ class AppContainer extends PureComponent {
   }
 
   render() {
-    return (<Component
-      {...this.props}
-    />);
+    return (
+      <Component
+        {...this.props}
+      />
+    );
   }
 }
 const mapStateToProps = ({ app }) => ({

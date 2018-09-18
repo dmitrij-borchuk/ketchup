@@ -1,6 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
+import {
+  renderTextField,
+  renderCheckbox,
+} from '../../utils/formsHelper';
+import {
+  INPUT_TYPES,
+} from '../../constants';
 import Popup, {
   PopupTitle,
   PopupControls,
@@ -12,9 +19,34 @@ import {
   PopupWrapper,
   FormWrapper,
   InputLabel,
-  LabelText,
   InputWrapper,
 } from './styles';
+
+const getInputByType = (input) => {
+  switch (input.type) {
+    case INPUT_TYPES.NUMBER:
+      return (
+        <Field
+          id={input.key}
+          name={input.key}
+          label={input.label}
+          component={renderTextField}
+          type={input.type}
+        />
+      );
+    case INPUT_TYPES.CHECKBOX:
+      return (
+        <Field
+          id={input.key}
+          name={input.key}
+          label={input.label}
+          component={renderCheckbox}
+        />
+      );
+    default:
+      return null;
+  }
+};
 
 class Settings extends PureComponent {
   static propTypes = {
@@ -70,16 +102,8 @@ class Settings extends PureComponent {
                   key={input.key}
                   htmlFor={input.key}
                 >
-                  <LabelText>
-                    {input.label}
-                  </LabelText>
                   <InputWrapper>
-                    <Field
-                      id={input.key}
-                      name={input.key}
-                      component="input"
-                      type={input.type}
-                    />
+                    {getInputByType(input)}
                   </InputWrapper>
                 </InputLabel>
               ))}

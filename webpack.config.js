@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill', './client/index.jsx'],
+  entry: ['@babel/polyfill', './client/index.jsx'],
   output: {
     path: path.resolve(__dirname, 'docs'),
     filename: 'bundle.js',

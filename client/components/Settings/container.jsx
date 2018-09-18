@@ -61,11 +61,13 @@ class SettingsContainer extends PureComponent {
   };
 
   render() {
-    return (<Component
-      {...this.props}
-      inputs={inputs}
-      onSubmit={this.onSubmit}
-    />);
+    return (
+      <Component
+        {...this.props}
+        inputs={inputs}
+        onSubmit={this.onSubmit}
+      />
+    );
   }
 }
 

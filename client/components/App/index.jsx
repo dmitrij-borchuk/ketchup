@@ -55,8 +55,8 @@ export default function App(props) {
       </Circle>
 
       {/* Settings */}
-      {settingsPopupShown &&
-        <Settings />
+      {settingsPopupShown
+        && <Settings />
       }
 
     </AppWrapper>

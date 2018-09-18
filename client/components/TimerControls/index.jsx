@@ -23,21 +23,25 @@ export default function TimerControls(props) {
   // );
   return (
     <Fragment>
-      {!isStarted &&
-        <Button
-          onClick={onStartClick}
-          large
-        >
-          Start
-        </Button>
+      {!isStarted
+        && (
+          <Button
+            onClick={onStartClick}
+            large
+          >
+            Start
+          </Button>
+        )
       }
-      {isStarted &&
-        <Button
-          onClick={onPauseClick}
-          large
-        >
-          Pause
-        </Button>
+      {isStarted
+        && (
+          <Button
+            onClick={onPauseClick}
+            large
+          >
+            Pause
+          </Button>
+        )
       }
       <Button
         onClick={onFinishClick}
