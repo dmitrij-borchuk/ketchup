@@ -2,12 +2,13 @@ import {
   SET_TIMER,
   START_TIMER,
   STOP_TIMER,
+  RESET_TIMER,
 } from '../actions/timer';
-import { SECONDS_IN_SESSION } from '../constants';
 
 const defaultState = {
-  seconds: SECONDS_IN_SESSION,
+  seconds: 0,
   isStarted: false,
+  isFinished: true,
 };
 
 export default function (state = defaultState, action) {
@@ -21,11 +22,19 @@ export default function (state = defaultState, action) {
       return {
         ...state,
         isStarted: true,
+        isFinished: false,
       };
     case STOP_TIMER:
       return {
         ...state,
         isStarted: false,
+      };
+    case RESET_TIMER:
+      return {
+        ...state,
+        isStarted: false,
+        isFinished: true,
+        seconds: action.payload.seconds,
       };
     default:
       return state;

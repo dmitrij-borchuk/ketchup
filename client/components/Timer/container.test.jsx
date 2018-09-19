@@ -15,6 +15,6 @@ describe('Timer container', () => {
       </Provider>,
     );
 
-    expect(rendered.text()).toEqual('<Connect(Timer) />');
+    expect(rendered.text()).toEqual('<Connect(TimerContainer) />');
   });
 });

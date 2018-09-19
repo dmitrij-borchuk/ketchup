@@ -18,7 +18,9 @@ export default function Timer(props) {
 
   return (
     <Container>
-      {minutesString}:{lastSecondsString}
+      {minutesString}
+      :
+      {lastSecondsString}
     </Container>
   );
 }

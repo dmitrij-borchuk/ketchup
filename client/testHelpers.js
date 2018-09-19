@@ -9,3 +9,9 @@ export const createDispatch = (state, mock) => (action) => {
   }
   dispatch(action);
 };
+
+export const createStoreMock = state => ({
+  getState: () => state,
+  subscribe: () => {},
+  dispatch: () => {},
+});

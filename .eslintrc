@@ -9,6 +9,7 @@
     "afterEach": true,
     "Audio": true
   },
+  "parser": "babel-eslint",
   "rules": {
     "function-paren-newline": [
       "error",
