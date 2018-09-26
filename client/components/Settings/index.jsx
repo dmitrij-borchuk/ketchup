@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
+import Typography from '@material-ui/core/Typography';
 import {
   renderTextField,
   renderCheckbox,
@@ -58,6 +59,11 @@ class Settings extends PureComponent {
       type: PropTypes.string,
       key: PropTypes.string,
     })).isRequired,
+    sessions: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      type: PropTypes.string,
+      key: PropTypes.string,
+    })).isRequired,
   };
 
   static defaultProps = {
@@ -83,6 +89,7 @@ class Settings extends PureComponent {
       hideSettings,
       handleSubmit,
       inputs,
+      sessions,
     } = this.props;
 
     return (
@@ -96,6 +103,14 @@ class Settings extends PureComponent {
               <CloseIcon onClick={hideSettings} />
             </CloseIconWrapper>
             <FormWrapper>
+              <Typography variant="subheading" gutterBottom>
+                Sessions:
+              </Typography>
+              {sessions.map(session => (
+                <div key={session.name}>
+                  {`${session.name}: ${session.length}`}
+                </div>
+              ))}
 
               {inputs.map(input => (
                 <InputLabel

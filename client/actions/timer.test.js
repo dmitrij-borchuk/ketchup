@@ -1,7 +1,8 @@
-import { SECONDS_IN_SESSION } from '../constants';
+import { DEFAULT_SESSION_LENGTH } from '../constants';
 import {
   createDispatch,
   createStoreMock,
+  getFirstCallForActionType,
 } from '../testHelpers';
 
 import {
@@ -13,10 +14,6 @@ import {
   startTimer,
   stopTimer,
 } from './timer';
-
-function getFirstCallForActionType(mock, type) {
-  return mock.mock.calls.filter(call => call[0].type === type)[0];
-}
 
 describe('Timer actions', () => {
   it('setTimer ', () => {
@@ -44,7 +41,7 @@ describe('Timer actions', () => {
     expect(actionCall[0]).toEqual({
       type: RESET_TIMER,
       payload: {
-        seconds: SECONDS_IN_SESSION,
+        seconds: DEFAULT_SESSION_LENGTH,
       },
     });
   });
@@ -76,7 +73,7 @@ describe('Timer actions', () => {
 
     const actionCall = getFirstCallForActionType(dispatchMock, RESET_TIMER);
     expect(actionCall[0].payload).toEqual({
-      seconds: SECONDS_IN_SESSION,
+      seconds: DEFAULT_SESSION_LENGTH,
     });
   });
   it('if timer is started it should count seconds from max to 0', () => {
@@ -84,7 +81,7 @@ describe('Timer actions', () => {
 
     const state = {
       timer: {
-        seconds: SECONDS_IN_SESSION,
+        seconds: DEFAULT_SESSION_LENGTH,
         isStarted: false,
       },
     };
@@ -97,14 +94,14 @@ describe('Timer actions', () => {
     jest.advanceTimersByTime(msInSec * skipSeconds);
 
     const actionCall = getFirstCallForActionType(dispatchMock, SET_TIMER);
-    expect(actionCall[0].payload).toEqual(SECONDS_IN_SESSION - skipSeconds);
+    expect(actionCall[0].payload).toEqual(DEFAULT_SESSION_LENGTH - skipSeconds);
   });
   it('`stopTimer` should clear timeout', () => {
     jest.useFakeTimers();
 
     const state = {
       timer: {
-        seconds: SECONDS_IN_SESSION,
+        seconds: DEFAULT_SESSION_LENGTH,
         isStarted: false,
       },
     };
@@ -117,7 +114,7 @@ describe('Timer actions', () => {
     jest.advanceTimersByTime(msInSec * skipSeconds);
 
     let actionCall = getFirstCallForActionType(dispatchMock, SET_TIMER);
-    expect(actionCall[0].payload).toEqual(SECONDS_IN_SESSION - skipSeconds);
+    expect(actionCall[0].payload).toEqual(DEFAULT_SESSION_LENGTH - skipSeconds);
     const callsCount = dispatchMock.mock.calls.length;
 
     const stopDispatchMock = jest.fn();

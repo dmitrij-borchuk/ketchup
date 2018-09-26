@@ -5,13 +5,12 @@ import {
 } from '../actions/app';
 import {
   SETTINGS_KEYS,
-  SECONDS_IN_SESSION,
 } from '../constants';
 
 const defaultState = {
   settings: {
-    [SETTINGS_KEYS.SES_LENGTH]: SECONDS_IN_SESSION,
     [SETTINGS_KEYS.PLAY_SOUND]: true,
+    sessions: [],
   },
   settingsPopupShown: false,
 };

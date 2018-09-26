@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setItem } from '../../utils/storage';
 import Component from './index';
 import {
   hideSettings,
@@ -9,17 +8,11 @@ import {
 } from '../../actions/app';
 import * as timerActions from '../../actions/timer';
 import {
-  LOCAL_STORAGE_KEYS,
   SETTINGS_KEYS,
   INPUT_TYPES,
 } from '../../constants';
 
 const inputs = [
-  {
-    label: 'Session length (sec)',
-    type: INPUT_TYPES.NUMBER,
-    key: SETTINGS_KEYS.SES_LENGTH,
-  },
   {
     label: 'Play sound',
     type: INPUT_TYPES.CHECKBOX,
@@ -56,15 +49,19 @@ class SettingsContainer extends PureComponent {
       setTimer(parsedData.sesLength);
     }
 
-    setItem(LOCAL_STORAGE_KEYS.SETTINGS, parsedData);
     set(parsedData);
   };
 
   render() {
+    const {
+      sessions,
+    } = this.props;
+
     return (
       <Component
         {...this.props}
         inputs={inputs}
+        sessions={sessions}
         onSubmit={this.onSubmit}
       />
     );
@@ -73,6 +70,7 @@ class SettingsContainer extends PureComponent {
 
 const mapStateToProps = ({ app, timer }) => ({
   initialValues: app.settings,
+  sessions: app.settings.sessions,
   isTimerFinished: timer.isFinished,
 });
 const mapDispatchToProps = {
