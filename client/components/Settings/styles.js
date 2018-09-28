@@ -27,3 +27,6 @@ export const InputWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
+export const RemoveIcon = styled.span`
+  ${props => (props.disabled ? 'opacity: 0.3;' : 'cursor: pointer;')}
+`;

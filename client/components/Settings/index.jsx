@@ -30,6 +30,7 @@ import {
   FormWrapper,
   InputLabel,
   InputWrapper,
+  RemoveIcon,
 } from './styles';
 
 const getInputByType = (input) => {
@@ -59,7 +60,7 @@ const getInputByType = (input) => {
 };
 
 // eslint-disable-next-line react/prop-types
-const renderSession = ({ fields }) => (
+const renderSessions = ({ fields }) => (
   <Fragment>
     {fields.map((member, index) => (
       // eslint-disable-next-line react/no-array-index-key
@@ -77,6 +78,10 @@ const renderSession = ({ fields }) => (
           component={renderTextField}
           type="number"
         />
+
+        <RemoveIcon disabled={fields.length <= 1}>
+          <CloseIcon onClick={() => (fields.length > 1) && fields.remove(index)} />
+        </RemoveIcon>
       </div>
     ))}
 
@@ -142,7 +147,7 @@ class Settings extends PureComponent {
               </Typography>
               <FieldArray
                 name="sessions"
-                component={renderSession}
+                component={renderSessions}
               />
 
               {inputs.map(input => (
