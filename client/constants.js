@@ -6,7 +6,6 @@ export const LOCAL_STORAGE_KEYS = {
 };
 
 export const SETTINGS_KEYS = {
-  SES_LENGTH: 'sesLength',
   PLAY_SOUND: 'playSound',
 };
 

@@ -1,3 +1,4 @@
+import shortid from 'shortid';
 import {
   STORAGE_GET,
   STORAGE_SET,
@@ -34,8 +35,15 @@ export const setSettings = data => (dispatch) => {
   });
 };
 
+export const SETTINGS_SET_CURRENT_SESSION = 'SETTINGS_SET_CURRENT_SESSION';
+export const setCurrentSession = session => ({
+  type: SETTINGS_SET_CURRENT_SESSION,
+  payload: session,
+});
+
 const processSessions = (sessions = []) => {
   const defaultSession = {
+    id: shortid.generate(),
     length: DEFAULT_SESSION_LENGTH,
     name: DEFAULT_SESSION_NAME,
   };
@@ -48,11 +56,14 @@ export const restoreSettings = () => (dispatch) => {
     type: STORAGE_GET,
     payload: LOCAL_STORAGE_KEYS.SETTINGS,
   }) || {};
+  const processedSessions = processSessions(settings.sessions);
+  const defaultSession = processedSessions[0];
   dispatch(setSettings({
     ...settings,
-    sessions: processSessions(settings.sessions),
+    sessions: processedSessions,
   }));
+  dispatch(setCurrentSession(defaultSession));
   return dispatch(
-    setTimer(settings.sesLength || DEFAULT_SESSION_LENGTH),
+    setTimer(defaultSession.length),
   );
 };

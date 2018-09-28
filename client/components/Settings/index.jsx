@@ -1,6 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, {
+  PureComponent,
+  Fragment,
+} from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
+import {
+  reduxForm,
+  FieldArray,
+  Field,
+} from 'redux-form';
+import shortid from 'shortid';
 import Typography from '@material-ui/core/Typography';
 import {
   renderTextField,
@@ -15,6 +23,7 @@ import Popup, {
 } from '../Popup';
 import CloseIcon from '../Icons/close';
 import Button from '../Button';
+import validate from './validation';
 import {
   CloseIconWrapper,
   PopupWrapper,
@@ -49,17 +58,43 @@ const getInputByType = (input) => {
   }
 };
 
+// eslint-disable-next-line react/prop-types
+const renderSession = ({ fields }) => (
+  <Fragment>
+    {fields.map((member, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <div key={index}>
+        <Field
+          name={`${member}.name`}
+          label="Name*"
+          component={renderTextField}
+          type="text"
+        />
+
+        <Field
+          name={`${member}.length`}
+          label="Length*"
+          component={renderTextField}
+          type="number"
+        />
+      </div>
+    ))}
+
+    <Button
+      onClick={() => fields.push({ id: shortid.generate() })}
+      modifier={Button.MODIFIERS.DARK}
+    >
+      Add session
+    </Button>
+  </Fragment>
+);
+
 class Settings extends PureComponent {
   static propTypes = {
-    // onSaveClick: PropTypes.func,
     handleSubmit: PropTypes.func,
     hideSettings: PropTypes.func,
+    valid: PropTypes.bool.isRequired,
     inputs: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      type: PropTypes.string,
-      key: PropTypes.string,
-    })).isRequired,
-    sessions: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string,
       type: PropTypes.string,
       key: PropTypes.string,
@@ -67,7 +102,6 @@ class Settings extends PureComponent {
   };
 
   static defaultProps = {
-    // onSaveClick: () => {},
     handleSubmit: () => {},
     hideSettings: () => {},
   };
@@ -89,7 +123,7 @@ class Settings extends PureComponent {
       hideSettings,
       handleSubmit,
       inputs,
-      sessions,
+      valid,
     } = this.props;
 
     return (
@@ -106,11 +140,10 @@ class Settings extends PureComponent {
               <Typography variant="subheading" gutterBottom>
                 Sessions:
               </Typography>
-              {sessions.map(session => (
-                <div key={session.name}>
-                  {`${session.name}: ${session.length}`}
-                </div>
-              ))}
+              <FieldArray
+                name="sessions"
+                component={renderSession}
+              />
 
               {inputs.map(input => (
                 <InputLabel
@@ -128,6 +161,7 @@ class Settings extends PureComponent {
               <Button
                 onClick={() => this.onSaveClick()}
                 modifier={Button.MODIFIERS.DARK}
+                disabled={!valid}
               >
                 Save
               </Button>
@@ -141,4 +175,5 @@ class Settings extends PureComponent {
 
 export default reduxForm({
   form: 'settings',
+  validate,
 })(Settings);

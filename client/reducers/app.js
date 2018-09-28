@@ -2,16 +2,15 @@ import {
   SHOW_SETTINGS,
   HIDE_SETTINGS,
   SET_SETTINGS,
+  SETTINGS_SET_CURRENT_SESSION,
 } from '../actions/app';
-import {
-  SETTINGS_KEYS,
-} from '../constants';
 
 const defaultState = {
   settings: {
-    [SETTINGS_KEYS.PLAY_SOUND]: true,
+    sesLength: true,
     sessions: [],
   },
+  currentSession: null,
   settingsPopupShown: false,
 };
 
@@ -34,6 +33,11 @@ export default function (state = defaultState, action) {
           ...state.settings,
           ...action.payload,
         },
+      };
+    case SETTINGS_SET_CURRENT_SESSION:
+      return {
+        ...state,
+        currentSession: action.payload,
       };
     default:
       return state;

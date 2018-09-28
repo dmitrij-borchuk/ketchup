@@ -19,10 +19,6 @@ const inputs = [
     key: SETTINGS_KEYS.PLAY_SOUND,
   },
 ];
-const parsers = {
-  [INPUT_TYPES.NUMBER]: value => parseInt(value, 10),
-  [INPUT_TYPES.CHECKBOX]: value => value,
-};
 
 class SettingsContainer extends PureComponent {
   static propTypes = {
@@ -36,17 +32,23 @@ class SettingsContainer extends PureComponent {
       set,
       setTimer,
       isTimerFinished,
+      currentSession,
     } = this.props;
-    const parsedData = inputs.reduce(
-      (acc, input) => ({
-        ...acc,
-        [input.key]: parsers[input.type](data[input.key]),
-      }),
-      {},
+
+    const parsedData = {
+      playSound: data.playSound,
+      sessions: data.sessions.map(session => ({
+        ...session,
+        length: parseInt(session.length, 10),
+      })),
+    };
+    const editedCurrentSession = parsedData.sessions.find(
+      session => currentSession.id === session.id,
     );
 
     if (isTimerFinished) {
-      setTimer(parsedData.sesLength);
+      const sessionToSet = editedCurrentSession || parsedData.sessions[0];
+      setTimer(sessionToSet.length);
     }
 
     set(parsedData);
@@ -71,6 +73,7 @@ class SettingsContainer extends PureComponent {
 const mapStateToProps = ({ app, timer }) => ({
   initialValues: app.settings,
   sessions: app.settings.sessions,
+  currentSession: app.currentSession,
   isTimerFinished: timer.isFinished,
 });
 const mapDispatchToProps = {

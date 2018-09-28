@@ -33,6 +33,9 @@ describe('Timer actions', () => {
     const getStateMock = createStoreMock({
       app: {
         settings: {},
+        currentSession: {
+          length: DEFAULT_SESSION_LENGTH,
+        },
       },
     });
     resetTimer()(dispatchMock, getStateMock.getState);
@@ -50,6 +53,9 @@ describe('Timer actions', () => {
     const getStateMock = createStoreMock({
       app: {
         settings: {},
+        currentSession: {
+          length: DEFAULT_SESSION_LENGTH,
+        },
       },
     });
     resetTimer()(dispatchMock, getStateMock.getState);
@@ -61,6 +67,9 @@ describe('Timer actions', () => {
     const state = {
       app: {
         settings: {},
+        currentSession: {
+          length: DEFAULT_SESSION_LENGTH,
+        },
       },
       timer: {
         seconds: 0,
@@ -204,6 +213,9 @@ describe('Timer actions', () => {
       },
       app: {
         settings: {},
+        currentSession: {
+          length: DEFAULT_SESSION_LENGTH,
+        },
       },
     };
     const dispatchMock = jest.fn();

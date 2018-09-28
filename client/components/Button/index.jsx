@@ -9,6 +9,7 @@ export default function Button(props) {
     type,
     modifier,
     large,
+    disabled,
   } = props;
 
   return (
@@ -17,6 +18,7 @@ export default function Button(props) {
       type={type}
       modifier={modifier}
       large={large}
+      disabled={disabled}
     >
       {children}
     </Container>
@@ -46,6 +48,7 @@ Button.propTypes = {
     Button.MODIFIERS.DARK,
   ]),
   large: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -54,4 +57,5 @@ Button.defaultProps = {
   type: Button.TYPES.PRIMARY,
   modifier: Button.MODIFIERS.LIGHT,
   large: false,
+  disabled: false,
 };

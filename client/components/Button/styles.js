@@ -6,7 +6,7 @@ export const getStyleByType = (type) => {
       background: none;
       color: #fff;
       &:hover {
-        background: #b71c1c;
+        ${props => (props.disabled ? '' : 'background: #b71c1c;')}
       }
     `,
   };
@@ -18,15 +18,17 @@ export const getStyleByModifier = (name) => {
       background: none;
       color: #fff;
       &:hover {
-        background: #b71c1c;
+        ${props => (props.disabled ? '' : 'background: #b71c1c;')}
       }
     `,
     DARK: css`
       background: #b71c1c;
       color: #fff;
       &:hover {
-        color: #b71c1c;
-        background: none;
+        ${props => (props.disabled ? '' : `
+          color: #b71c1c;
+          background: none;
+        `)}
       }
     `,
   };
@@ -35,10 +37,11 @@ export const getStyleByModifier = (name) => {
 export const Container = styled.button`
   border: none;
   border-radius: 2px;
-  cursor: pointer;
   padding: 5px 10px;
   transition: background-color 0.2s ease;
+  ${props => (props.disabled ? '' : 'cursor: pointer;')}
   ${props => getStyleByType(props.type)}
   ${props => getStyleByModifier(props.modifier)}
   ${props => (props.large ? 'font-size: 180%;' : '')}
+  ${props => (props.disabled ? 'opacity: 0.5;' : '')}
 `;
