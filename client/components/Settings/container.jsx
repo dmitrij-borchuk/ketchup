@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Component from './index';
 import {
   hideSettings,
@@ -11,6 +13,12 @@ import {
   SETTINGS_KEYS,
   INPUT_TYPES,
 } from '../../constants';
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'light',
+  },
+});
 
 const inputs = [
   {
@@ -60,12 +68,14 @@ class SettingsContainer extends PureComponent {
     } = this.props;
 
     return (
-      <Component
-        {...this.props}
-        inputs={inputs}
-        sessions={sessions}
-        onSubmit={this.onSubmit}
-      />
+      <MuiThemeProvider theme={theme}>
+        <Component
+          {...this.props}
+          inputs={inputs}
+          sessions={sessions}
+          onSubmit={this.onSubmit}
+        />
+      </MuiThemeProvider>
     );
   }
 }

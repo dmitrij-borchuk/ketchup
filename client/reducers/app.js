@@ -10,7 +10,9 @@ const defaultState = {
     sesLength: true,
     sessions: [],
   },
-  currentSession: null,
+  // Here is `undefined` instead of `null`
+  // because default prop will be applied only if value is `undefined`
+  currentSession: undefined,
   settingsPopupShown: false,
 };
 

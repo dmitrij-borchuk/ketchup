@@ -73,6 +73,9 @@ describe('App actions', () => {
         app: {
           settings: {},
         },
+        timer: {
+          isFinished: true,
+        },
       };
       const data = {
         sessions: [{

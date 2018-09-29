@@ -28,11 +28,14 @@ class AppContainer extends PureComponent {
 }
 const mapStateToProps = ({ app }) => ({
   settingsPopupShown: app.settingsPopupShown,
+  sessions: app.settings.sessions,
+  currentSession: app.currentSession,
 });
 const mapDispatchToProps = {
   showSettings: appActions.showSettings,
   hideSettings: appActions.hideSettings,
   restoreSettings: appActions.restoreSettings,
+  setCurrentSession: appActions.setCurrentSession,
 };
 
 export default connect(

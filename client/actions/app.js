@@ -36,10 +36,18 @@ export const setSettings = data => (dispatch) => {
 };
 
 export const SETTINGS_SET_CURRENT_SESSION = 'SETTINGS_SET_CURRENT_SESSION';
-export const setCurrentSession = session => ({
-  type: SETTINGS_SET_CURRENT_SESSION,
-  payload: session,
-});
+export const setCurrentSession = session => (dispatch, getState) => {
+  const state = getState();
+
+  if (state.timer.isFinished) {
+    dispatch(setTimer(session.length));
+  }
+
+  return dispatch({
+    type: SETTINGS_SET_CURRENT_SESSION,
+    payload: session,
+  });
+};
 
 const processSessions = (sessions = []) => {
   const defaultSession = {
@@ -62,8 +70,5 @@ export const restoreSettings = () => (dispatch) => {
     ...settings,
     sessions: processedSessions,
   }));
-  dispatch(setCurrentSession(defaultSession));
-  return dispatch(
-    setTimer(defaultSession.length),
-  );
+  return dispatch(setCurrentSession(defaultSession));
 };

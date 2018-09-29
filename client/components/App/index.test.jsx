@@ -11,6 +11,7 @@ describe('App component', () => {
       <Component
         showSettings={() => {}}
         settingsPopupShown={false}
+        sessions={[]}
       />,
     );
 
