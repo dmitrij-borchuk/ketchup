@@ -36,3 +36,5 @@ git push
 git push --tags
 ```
 Now you can make a PR to `master` branch. Then you can add release notes [here](https://github.com/dmitrij-borchuk/ketchup/releases)
+
+After merging PR to `master` from `develop` dont forget to sync `master` back to `develop`.
