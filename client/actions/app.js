@@ -39,6 +39,14 @@ export const SETTINGS_SET_CURRENT_SESSION = 'SETTINGS_SET_CURRENT_SESSION';
 export const setCurrentSession = session => (dispatch, getState) => {
   const state = getState();
 
+  dispatch({
+    type: STORAGE_SET,
+    payload: {
+      key: LOCAL_STORAGE_KEYS.LAST_SESSION_ID,
+      data: session.id,
+    },
+  });
+
   if (state.timer.isFinished) {
     dispatch(setTimer(session.length));
   }
@@ -64,11 +72,16 @@ export const restoreSettings = () => (dispatch) => {
     type: STORAGE_GET,
     payload: LOCAL_STORAGE_KEYS.SETTINGS,
   }) || {};
+  const lastSessionId = dispatch({
+    type: STORAGE_GET,
+    payload: LOCAL_STORAGE_KEYS.LAST_SESSION_ID,
+  });
   const processedSessions = processSessions(settings.sessions);
   const defaultSession = processedSessions[0];
+  const lastSession = processedSessions.find(ses => ses.id === lastSessionId);
   dispatch(setSettings({
     ...settings,
     sessions: processedSessions,
   }));
-  return dispatch(setCurrentSession(defaultSession));
+  return dispatch(setCurrentSession(lastSession || defaultSession));
 };
