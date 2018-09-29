@@ -32,6 +32,7 @@ yarn build
 Commit you build
 ```
 yarn version
-git push -tags
+git push
+git push --tags
 ```
-Then you can add release notes here `https://github.com/dmitrij-borchuk/ketchup/releases`
+Now you can make a PR to `master` branch. Then you can add release notes [here](https://github.com/dmitrij-borchuk/ketchup/releases)
