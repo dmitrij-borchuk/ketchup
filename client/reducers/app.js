@@ -2,17 +2,17 @@ import {
   SHOW_SETTINGS,
   HIDE_SETTINGS,
   SET_SETTINGS,
+  SETTINGS_SET_CURRENT_SESSION,
 } from '../actions/app';
-import {
-  SETTINGS_KEYS,
-  SECONDS_IN_SESSION,
-} from '../constants';
 
 const defaultState = {
   settings: {
-    [SETTINGS_KEYS.SES_LENGTH]: SECONDS_IN_SESSION,
-    [SETTINGS_KEYS.PLAY_SOUND]: true,
+    sesLength: true,
+    sessions: [],
   },
+  // Here is `undefined` instead of `null`
+  // because default prop will be applied only if value is `undefined`
+  currentSession: undefined,
   settingsPopupShown: false,
 };
 
@@ -35,6 +35,11 @@ export default function (state = defaultState, action) {
           ...state.settings,
           ...action.payload,
         },
+      };
+    case SETTINGS_SET_CURRENT_SESSION:
+      return {
+        ...state,
+        currentSession: action.payload,
       };
     default:
       return state;

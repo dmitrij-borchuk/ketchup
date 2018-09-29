@@ -2,12 +2,11 @@
 export const createDispatch = (state, mock) => (action) => {
   function dispatch(a) {
     if (typeof a === 'function') {
-      a(dispatch, () => state);
-    } else {
-      mock(a);
+      return a(dispatch, () => state);
     }
+    return mock(a);
   }
-  dispatch(action);
+  return dispatch(action);
 };
 
 export const createStoreMock = state => ({
@@ -15,3 +14,14 @@ export const createStoreMock = state => ({
   subscribe: () => {},
   dispatch: () => {},
 });
+
+export const getFirstCallForActionType = (mock, type) => mock.mock.calls.filter(
+  call => call[0].type === type,
+)[0];
+
+export const onActionType = (type, cb) => (action) => {
+  if (action.type === type) {
+    return cb();
+  }
+  return null;
+};

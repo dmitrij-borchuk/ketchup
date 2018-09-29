@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Timer from '../Timer/container';
 import Settings from '../Settings/container';
 import SettingsIcon from '../Icons/settings';
@@ -21,6 +23,9 @@ export default function App(props) {
   const {
     showSettings,
     settingsPopupShown,
+    sessions,
+    currentSession,
+    setCurrentSession,
   } = props;
 
   return (
@@ -47,6 +52,22 @@ export default function App(props) {
       {/* Timer */}
       <Circle>
         <div>
+          <Select
+            value={currentSession.id}
+            onChange={
+              e => setCurrentSession(sessions.find(ses => ses.id === e.target.value))
+            }
+            fullWidth
+          >
+            {sessions.map(session => (
+              <MenuItem
+                key={session.id}
+                value={session.id}
+              >
+                {session.name}
+              </MenuItem>
+            ))}
+          </Select>
           <Timer />
           <Controls>
             <TimerControls />
@@ -65,8 +86,17 @@ export default function App(props) {
 
 App.propTypes = {
   showSettings: PropTypes.func.isRequired,
+  setCurrentSession: PropTypes.func.isRequired,
   settingsPopupShown: PropTypes.bool.isRequired,
+  currentSession: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }),
+  sessions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 App.defaultProps = {
+  currentSession: { id: '' },
 };

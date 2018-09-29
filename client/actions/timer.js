@@ -1,9 +1,5 @@
 import alarmSound from '../assets/sounds/Twin-bell-alarm-clock-ringing-short.mp3';
 import { playSound } from '../utils/soundManager';
-import {
-  SETTINGS_KEYS,
-  SECONDS_IN_SESSION,
-} from '../constants';
 
 let timeout = null;
 
@@ -25,14 +21,14 @@ export const RESET_TIMER = 'RESET_TIMER';
 export const resetTimer = () => (dispatch, getState) => {
   const state = getState();
   const {
-    settings,
+    currentSession,
   } = state.app;
 
   clearTimeout(timeout);
   return dispatch({
     type: RESET_TIMER,
     payload: {
-      seconds: settings[SETTINGS_KEYS.SES_LENGTH] || SECONDS_IN_SESSION,
+      seconds: currentSession.length,
     },
   });
 };
@@ -47,7 +43,7 @@ export const startTimer = () => (dispatch, getState) => {
     const newSeconds = currentState.timer.seconds - 1;
     if (newSeconds <= 0) {
       dispatch(stopTimer());
-      if (currentState.app.settings[SETTINGS_KEYS.PLAY_SOUND]) {
+      if (currentState.app.settings.playSound) {
         playSound(alarmSound);
       }
     } else {

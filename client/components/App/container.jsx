@@ -1,31 +1,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getItem } from '../../utils/storage';
 import Component from './index';
 import * as appActions from '../../actions/app';
-import * as timerActions from '../../actions/timer';
-import {
-  LOCAL_STORAGE_KEYS,
-  SECONDS_IN_SESSION,
-} from '../../constants';
 
 class AppContainer extends PureComponent {
   static propTypes = {
     showSettings: PropTypes.func.isRequired,
     settingsPopupShown: PropTypes.bool.isRequired,
-    setSettings: PropTypes.func.isRequired,
-    setTimer: PropTypes.func.isRequired,
+    restoreSettings: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
     const {
-      setSettings,
-      setTimer,
+      restoreSettings,
     } = this.props;
-    const settings = getItem(LOCAL_STORAGE_KEYS.SETTINGS) || {};
-    setSettings(settings);
-    setTimer(settings.sesLength || SECONDS_IN_SESSION);
+    restoreSettings();
   }
 
   render() {
@@ -38,12 +28,14 @@ class AppContainer extends PureComponent {
 }
 const mapStateToProps = ({ app }) => ({
   settingsPopupShown: app.settingsPopupShown,
+  sessions: app.settings.sessions,
+  currentSession: app.currentSession,
 });
 const mapDispatchToProps = {
   showSettings: appActions.showSettings,
   hideSettings: appActions.hideSettings,
-  setSettings: appActions.setSettings,
-  setTimer: timerActions.setTimer,
+  restoreSettings: appActions.restoreSettings,
+  setCurrentSession: appActions.setCurrentSession,
 };
 
 export default connect(

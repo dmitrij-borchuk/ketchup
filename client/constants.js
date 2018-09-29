@@ -1,14 +1,12 @@
-export const SECONDS_IN_SESSION = 1500;
-export default {
-  SECONDS_IN_SESSION,
-};
+export const DEFAULT_SESSION_LENGTH = 1500;
+export const DEFAULT_SESSION_NAME = 'Default session';
 
 export const LOCAL_STORAGE_KEYS = {
   SETTINGS: 'SETTINGS_KEY',
+  LAST_SESSION_ID: 'LAST_SESSION_ID',
 };
 
 export const SETTINGS_KEYS = {
-  SES_LENGTH: 'sesLength',
   PLAY_SOUND: 'playSound',
 };
 
