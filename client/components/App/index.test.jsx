@@ -12,6 +12,7 @@ describe('App component', () => {
         showSettings={() => {}}
         settingsPopupShown={false}
         sessions={[]}
+        setCurrentSession={() => {}}
       />,
     );
 
