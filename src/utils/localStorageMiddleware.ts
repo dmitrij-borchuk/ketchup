@@ -1,9 +1,10 @@
+import { Middleware } from 'redux';
 import { getItem, setItem } from './storage';
 
 export const STORAGE_SET = 'STORAGE_SET';
 export const STORAGE_GET = 'STORAGE_GET';
 
-export default function localStorageMiddleware() {
+const localStorageMiddleware: Middleware = () => {
   return next => (action) => {
     switch (action.type) {
       case STORAGE_SET:
@@ -20,4 +21,6 @@ export default function localStorageMiddleware() {
     }
     return next(action);
   };
-}
+};
+
+export default localStorageMiddleware;

@@ -3,12 +3,21 @@ import {
   HIDE_SETTINGS,
   SET_SETTINGS,
   SETTINGS_SET_CURRENT_SESSION,
+  ChatActionTypes,
 } from '../actions/app';
+import { ISettings } from '../types/settings.interface';
+import { ISession } from '../types/session.interface';
 
-const defaultState = {
+export interface IAppState {
+  settings: ISettings
+  currentSession?: ISession
+  settingsPopupShown: boolean
+}
+
+const defaultState: IAppState = {
   settings: {
-    sesLength: true,
     sessions: [],
+    playSound: false,
   },
   // Here is `undefined` instead of `null`
   // because default prop will be applied only if value is `undefined`
@@ -16,7 +25,7 @@ const defaultState = {
   settingsPopupShown: false,
 };
 
-export default function (state = defaultState, action) {
+export default function (state = defaultState, action: ChatActionTypes) {
   switch (action.type) {
     case SHOW_SETTINGS:
       return {

@@ -3,15 +3,22 @@ import {
   START_TIMER,
   STOP_TIMER,
   RESET_TIMER,
+  TimerAction,
 } from '../actions/timer';
 
-const defaultState = {
+export interface ITimerState {
+  seconds: number
+  isStarted: boolean
+  isFinished: boolean
+}
+
+const defaultState: ITimerState = {
   seconds: 0,
   isStarted: false,
   isFinished: true,
 };
 
-export default function (state = defaultState, action) {
+export default function (state = defaultState, action: TimerAction) {
   switch (action.type) {
     case SET_TIMER:
       return {
