@@ -4,11 +4,20 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import thunk from 'redux-thunk';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import 'normalize.css';
 import * as serviceWorker from './serviceWorker';
 import App from './components/App/app.container';
 import reducers from './reducers';
 import localStorageMiddleware from './utils/localStorageMiddleware';
 import './index.css';
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 const store = createStore(
   reducers,
@@ -20,7 +29,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <App />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('root')
 );
