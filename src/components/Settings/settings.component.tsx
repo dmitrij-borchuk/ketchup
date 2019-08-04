@@ -62,39 +62,39 @@ const getInputByType = (input: any) => {
 };
 
 // eslint-disable-next-line react/prop-types
-const renderSessions = ({ fields }: any) => (
-  <Fragment>
-    {fields.map((member: any, index: any) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <div key={index}>
-        <Field
-          name={`${member}.name`}
-          label="Name*"
-          component={renderTextField}
-          type="text"
-        />
+// const renderSessions = ({ fields }: any) => (
+//   <Fragment>
+//     {fields.map((member: any, index: any) => (
+//       // eslint-disable-next-line react/no-array-index-key
+//       <div key={index}>
+//         <Field
+//           name={`${member}.name`}
+//           label="Name*"
+//           component={renderTextField}
+//           type="text"
+//         />
 
-        <Field
-          name={`${member}.length`}
-          label="Length*"
-          component={renderTextField}
-          type="number"
-        />
+//         <Field
+//           name={`${member}.length`}
+//           label="Length*"
+//           component={renderTextField}
+//           type="number"
+//         />
 
-        <RemoveIcon disabled={fields.length <= 1}>
-          <CloseIcon onClick={() => (fields.length > 1) && fields.remove(index)} />
-        </RemoveIcon>
-      </div>
-    ))}
+//         <RemoveIcon disabled={fields.length <= 1}>
+//           <CloseIcon onClick={() => (fields.length > 1) && fields.remove(index)} />
+//         </RemoveIcon>
+//       </div>
+//     ))}
 
-    <Button
-      onClick={() => fields.push({ id: shortid.generate() })}
-      modifier={Button.MODIFIERS.DARK}
-    >
-      Add session
-    </Button>
-  </Fragment>
-);
+//     <Button
+//       onClick={() => fields.push({ id: shortid.generate() })}
+//       modifier={Button.MODIFIERS.DARK}
+//     >
+//       Add session
+//     </Button>
+//   </Fragment>
+// );
 
 interface IInput {
   label: string,
@@ -102,8 +102,8 @@ interface IInput {
   key: SETTINGS_KEYS,
 }
 interface ISettingsProps {
-  handleSubmit: Function;
-  hideSettings: Function;
+  onSubmit: Function;
+  // hideSettings: Function;
   inputs: IInput[];
 }
 class Settings extends PureComponent<ISettingsProps> {
@@ -191,8 +191,8 @@ class Settings extends PureComponent<ISettingsProps> {
   }
 }
 
-// export default reduxForm({
+export default Settings
+// export default reduxForm<ISettingsProps, ISettingsProps>({
 //   form: 'settings',
-//   validate,
+//   validate: settingsFormValidator,
 // })(Settings);
-export default Settings;

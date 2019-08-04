@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
-import Component from './index';
+import Component from './settings.component';
 import {
   hideSettings,
   setSettings,
@@ -41,47 +41,51 @@ export interface ISettingsContainerProps {
 }
 
 function SettingsContainer(props: ISettingsContainerProps) {
-  // const onSubmit = (data: ISettingsForm) => {
-  //   const {
-  //     set,
-  //     setTimer,
-  //     isTimerFinished,
-  //     currentSession,
-  //   } = props;
+  const onSubmit = (data: ISettingsForm) => {
+    const {
+      set,
+      setTimer,
+      isTimerFinished,
+      currentSession,
+    } = props;
 
-  //   const parsedData: ISettings = {
-  //     playSound: data.playSound,
-  //     sessions: data.sessions.map(session => ({
-  //       ...session,
-  //       length: parseInt(session.length, 10),
-  //     })),
-  //   };
-  //   const editedCurrentSession = currentSession && parsedData.sessions.find(
-  //     session => currentSession.id === session.id,
-  //   );
+    const parsedData: ISettings = {
+      playSound: data.playSound,
+      sessions: data.sessions.map(session => ({
+        ...session,
+        length: parseInt(session.length, 10),
+      })),
+    };
+    const editedCurrentSession = currentSession && parsedData.sessions.find(
+      session => currentSession.id === session.id,
+    );
 
-  //   if (isTimerFinished) {
-  //     const sessionToSet = editedCurrentSession || parsedData.sessions[0];
-  //     setTimer(sessionToSet.length);
-  //   }
+    if (isTimerFinished) {
+      const sessionToSet = editedCurrentSession || parsedData.sessions[0];
+      setTimer(sessionToSet.length);
+    }
 
-  //   set(parsedData);
-  // };
-  // const {
-  //   sessions,
-  // } = props;
+    set(parsedData);
+  };
+  const {
+    sessions,
+  } = props;
 
-  // return (
-  //   <MuiThemeProvider theme={theme}>
-  //     <Component
-  //       {...props}
-  //       inputs={inputs}
-  //       sessions={sessions}
-  //       onSubmit={onSubmit}
-  //     />
-  //   </MuiThemeProvider>
-  // );
-  return <div>Settings</div>
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Component
+        {...props}
+        inputs={inputs}
+        onSubmit={() => {}}
+      />
+      {/* <Component
+        {...props}
+        inputs={inputs}
+        sessions={sessions}
+        onSubmit={onSubmit}
+      /> */}
+    </MuiThemeProvider>
+  );
 }
 
 const mapStateToProps = ({ app, timer }: IState) => ({

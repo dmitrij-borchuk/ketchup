@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Timer from '../Timer/timer.container';
-// import Settings from '../Settings/container';
+import Settings from '../Settings/settings.container';
 import SettingsIcon from '../Icons/settings';
 import TimerControls from '../TimerControls/container';
 import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png';
@@ -74,14 +74,14 @@ export default function App(props: any) {
         </div>
       </Circle>
 
+      {/* Settings */ }
+      {
+        settingsPopupShown
+        && <Settings />
+      }
 
     </AppWrapper>
   );
-  // {/* Settings */ }
-  // {
-  //   settingsPopupShown
-  //   && <Settings />
-  // }
 }
 
 // App.propTypes = {
