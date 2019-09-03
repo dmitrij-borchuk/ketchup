@@ -1,31 +1,40 @@
-import * as React from 'react';
-import { Helmet } from 'react-helmet';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Timer from '../Timer/timer.container';
-import Settings from '../Settings/settings.container';
-import SettingsIcon from '../Icons/settings';
-import TimerControls from '../TimerControls/container';
-import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png';
-import favicon32x32 from '../../assets/favicon/favicon-32x32.png';
-import favicon16x16 from '../../assets/favicon/favicon-16x16.png';
-import safariPinnedTab from '../../assets/favicon/safari-pinned-tab.svg';
+import React, { useCallback } from 'react'
+import { Helmet } from 'react-helmet'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import { TimerContainer } from '../Timer/timer.container'
+import { SettingsContainer } from '../Settings/settings.container'
+import SettingsIcon from '../Icons/settings'
+import { TimerControlsContainer } from '../TimerControls'
+import appleTouchIcon from '../../assets/favicon/apple-touch-icon.png'
+import favicon32x32 from '../../assets/favicon/favicon-32x32.png'
+import favicon16x16 from '../../assets/favicon/favicon-16x16.png'
+import safariPinnedTab from '../../assets/favicon/safari-pinned-tab.svg'
 import {
   AppWrapper,
   Circle,
   Controls,
   SettingsIconWrapper,
-} from './styles';
-const webmanifest = require('../../assets/favicon/site.webmanifest');
+} from './styles'
+import { ISession } from '../../types'
+const webmanifest = require('../../assets/favicon/site.webmanifest')
 
-export default function App(props: any) {
+interface IAppProps {
+  showSettings: Function,
+  settingsPopupShown: boolean,
+  sessions: ISession[],
+  currentSession: ISession,
+  setCurrentSession: Function,
+}
+export const App: React.FC<IAppProps> = (props) => {
   const {
     showSettings,
     settingsPopupShown,
     sessions,
     currentSession,
     setCurrentSession,
-  } = props;
+  } = props
+  const showSettingsCb = useCallback(() => showSettings(), [showSettings])
 
   return (
     <AppWrapper>
@@ -44,32 +53,34 @@ export default function App(props: any) {
       <SettingsIconWrapper>
         <SettingsIcon
           color="#fff"
-          onClick={showSettings}
+          onClick={showSettingsCb}
         />
       </SettingsIconWrapper>
 
       {/* Timer */}
       <Circle>
         <div>
-          <Select
-            value={currentSession.id}
-            onChange={
-              e => setCurrentSession(sessions.find((ses: any) => ses.id === e.target.value))
-            }
-            fullWidth
-          >
-            {sessions.map((session: any) => (
-              <MenuItem
-                key={session.id}
-                value={session.id}
-              >
-                {session.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <Timer />
+          <span data-testid="session-selector">
+            <Select
+              value={currentSession.id}
+              onChange={
+                e => setCurrentSession(sessions.find((ses: any) => ses.id === e.target.value))
+              }
+              fullWidth
+            >
+              {sessions.map((session: any) => (
+                <MenuItem
+                  key={session.id}
+                  value={session.id}
+                >
+                  {session.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </span>
+          <TimerContainer />
           <Controls>
-            <TimerControls />
+            <TimerControlsContainer />
           </Controls>
         </div>
       </Circle>
@@ -77,26 +88,9 @@ export default function App(props: any) {
       {/* Settings */ }
       {
         settingsPopupShown
-        && <Settings />
+        && <SettingsContainer />
       }
 
     </AppWrapper>
-  );
+  )
 }
-
-// App.propTypes = {
-//   showSettings: PropTypes.func.isRequired,
-//   setCurrentSession: PropTypes.func.isRequired,
-//   settingsPopupShown: PropTypes.bool.isRequired,
-//   currentSession: PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//   }),
-//   sessions: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//     name: PropTypes.string.isRequired,
-//   })).isRequired,
-// };
-
-App.defaultProps = {
-  currentSession: { id: '' },
-};

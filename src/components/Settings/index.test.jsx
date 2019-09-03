@@ -1,5 +1,4 @@
 // import React from 'react';
-// import { Provider } from 'react-redux';
 // import { render } from 'enzyme';
 // import Component from './index';
 // import { createStoreMock } from '../../testHelpers';

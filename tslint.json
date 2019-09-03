@@ -1,0 +1,13 @@
+{
+    "project": "./tsconfig.json",
+    "extends": "tslint-config-airbnb",
+    "rules": {
+        "semicolon": [true, "never"],
+        "variable-name": false,
+        "import-name": false,
+        "function-name": false,
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    }
+}
