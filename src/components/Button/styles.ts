@@ -1,4 +1,4 @@
-import styled, { css, ThemedCssFunction } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface IContainerProps {
   modifier: string;
@@ -7,7 +7,6 @@ interface IContainerProps {
   disabled: boolean;
 }
 export const getStyleByType = (type: string) => {
-  // Record<string, ThemedCssFunction<IContainerProps>>
   const map: any = {
     PRIMARY: css<IContainerProps>`
       background: none;

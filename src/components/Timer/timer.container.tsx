@@ -1,24 +1,14 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import Component from './timer.component';
-import { IState } from '../../reducers';
+import React, { useContext } from 'react'
+import Component from './timer.component'
+import { AppStateContext } from '../../context'
 
 export interface ITimerContainerProps {
 
 }
 
-function TimerContainer(props: ITimerContainerProps) {
-  return (<Component {...props} />);
+export const TimerContainer: React.FC<ITimerContainerProps> = (props) => {
+  const { state } = useContext(AppStateContext)
+  const { timer: { seconds } } = state
+
+  return <Component seconds={seconds} />
 }
-
-const mapStateToProps = ({ timer }: IState) => ({
-  seconds: timer.seconds,
-});
-
-const mapDispatchToProps = {
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TimerContainer);

@@ -1,44 +1,94 @@
-import * as React from 'react';
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
-import AppComponent from './app.component';
-import * as appActions from '../../actions/app';
-import { IState } from '../../reducers';
+import React, { useEffect, useContext, useCallback } from 'react'
+import shortid from 'shortid'
+import { App } from './app.component'
+import { AppStateContext, ACTIONS, StorageContext } from '../../context'
+import {
+  LOCAL_STORAGE_KEYS,
+  DEFAULT_SESSION_LENGTH,
+  DEFAULT_SESSION_NAME,
+} from '../../constants'
+import { ISettings, ISession } from '../../types'
+
+const processSessions = (sessions: ISession[] = []) => {
+  const defaultSession = {
+    id: shortid.generate(),
+    length: DEFAULT_SESSION_LENGTH,
+    name: DEFAULT_SESSION_NAME,
+  }
+
+  return sessions.length ? sessions : [defaultSession]
+}
+
+const defaultSettings: ISettings = {
+  sessions: [],
+  playSound: false,
+}
 
 export interface IAppContainerProps {
-  showSettings: Function,
-  settingsPopupShown: boolean,
-  restoreSettings: Function,
 }
+export const AppContainer: React.FC<IAppContainerProps> = () => {
+  const { state, dispatch } = useContext(AppStateContext)
+  const { settings: { sessions }, currentSession, settingsPopupShown } = state
+  const { getItem } = useContext(StorageContext)
+  const showSettings = useCallback(
+    () => {
+      dispatch({
+        type: ACTIONS.SET_SETTINGS_VISIBILITY,
+        payload: true,
+      })
+    },
+    [dispatch],
+  )
+  const setCurrentSession = useCallback(
+    (session) => {
+      dispatch({
+        type: ACTIONS.SET_CURRENT_SESSION,
+        payload: session,
+      })
+    },
+    [dispatch],
+  )
 
-function AppContainer(props: IAppContainerProps) {
-  const {
-    restoreSettings,
-  } = props;
+  useEffect(
+    () => {
+      const settings = getItem<ISettings>(LOCAL_STORAGE_KEYS.SETTINGS) || defaultSettings
+      const lastSessionId = getItem<string>(LOCAL_STORAGE_KEYS.LAST_SESSION_ID)
+      const processedSessions = processSessions(settings.sessions)
+      const defaultSession = processedSessions[0]
+      const lastSession = processedSessions.find(ses => ses.id === lastSessionId)
 
-  useEffect(() => {
-    restoreSettings();
-  }, [restoreSettings]);
+      const sessionToSet = lastSession || defaultSession
+      dispatch({
+        type: ACTIONS.SET_SETTINGS,
+        payload: {
+          ...settings,
+          sessions: processedSessions,
+        },
+      })
+      dispatch({
+        type: ACTIONS.SET_CURRENT_SESSION,
+        payload: sessionToSet,
+      })
+
+      dispatch({
+        type: ACTIONS.TIMER_SET_TIME,
+        payload: sessionToSet.length,
+      })
+    },
+    [dispatch, getItem],
+  )
+
+  if (!currentSession) {
+    return null
+  }
+
   return (
-    <AppComponent
-      {...props}
+    <App
+      showSettings={showSettings}
+      settingsPopupShown={settingsPopupShown}
+      sessions={sessions}
+      currentSession={currentSession}
+      setCurrentSession={setCurrentSession}
     />
-  );
+  )
 }
-
-const mapStateToProps = ({ app }: IState) => ({
-  settingsPopupShown: app.settingsPopupShown,
-  sessions: app.settings.sessions,
-  currentSession: app.currentSession,
-});
-const mapDispatchToProps = {
-  showSettings: appActions.showSettings,
-  hideSettings: appActions.hideSettings,
-  restoreSettings: appActions.restoreSettings,
-  setCurrentSession: appActions.setCurrentSession,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppContainer);

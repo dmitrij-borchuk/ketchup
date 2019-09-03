@@ -1,4 +1,4 @@
-import { ISession, ISessionForm } from "./session.interface";
+import { ISession, ISessionForm } from './session.interface'
 
 export interface ISettings {
   sessions: ISession[]

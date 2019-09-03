@@ -1,34 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   font-size: 5rem;
-`;
+`
 
-const secondsInMinute = 60;
-export default function Timer(props: any) {
+const secondsInMinute = 60
+
+interface ITimerProps {
+  seconds?: number
+}
+const Timer: React.FC<ITimerProps> = (props) => {
   const {
-    seconds,
-  } = props;
-  const minutes = Math.floor(seconds / secondsInMinute);
-  const lastSeconds = seconds - (minutes * secondsInMinute);
-  const minutesString = minutes.toString().padStart(2, '0');
-  const lastSecondsString = lastSeconds.toString().padStart(2, '0');
+    seconds = 0,
+  } = props
+  const minutes = Math.floor(seconds / secondsInMinute)
+  const lastSeconds = seconds - (minutes * secondsInMinute)
+  const minutesString = minutes.toString().padStart(2, '0')
+  const lastSecondsString = lastSeconds.toString().padStart(2, '0')
 
   return (
-    <Container>
+    <Container data-testid="timer">
       {minutesString}
       :
       {lastSecondsString}
     </Container>
-  );
+  )
 }
 
-Timer.propTypes = {
-  seconds: PropTypes.number,
-};
-
-Timer.defaultProps = {
-  seconds: 0,
-};
+export default Timer

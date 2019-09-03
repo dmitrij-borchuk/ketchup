@@ -1,198 +1,226 @@
-import React, {
-  PureComponent,
-  Fragment,
-} from 'react';
-import PropTypes from 'prop-types';
-import {
-  reduxForm,
-  FieldArray,
-  Field,
-} from 'redux-form';
-import shortid from 'shortid';
-import Typography from '@material-ui/core/Typography';
-import {
-  renderTextField,
-  renderCheckbox,
-} from '../../utils/formsHelper';
-// import {
-//   // INPUT_TYPES,
-// } from '../../constants';
+import React, { useCallback, useState, useEffect } from 'react'
+import shortid from 'shortid'
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
 import Popup, {
   PopupTitle,
   PopupControls,
-} from '../Popup';
-import CloseIcon from '../Icons/close';
-import Button from '../Button';
-import { settingsFormValidator } from './validation';
+} from '../Popup'
+import CloseIcon from '../Icons/close'
+import Button from '../Button'
 import {
   CloseIconWrapper,
   PopupWrapper,
   FormWrapper,
-  InputLabel,
-  InputWrapper,
   RemoveIcon,
-} from './styles';
-import { INPUT_TYPES } from '../../types/inputTypes.enum';
-import { SETTINGS_KEYS } from '../../types/settingsKeys.enum';
+} from './styles'
+import { ISession } from '../../types/session.interface'
+import { ISettings } from '../../types'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
-const getInputByType = (input: any) => {
-  switch (input.type) {
-    case INPUT_TYPES.NUMBER:
-      return (
-        <Field
-          id={input.key}
-          name={input.key}
-          label={input.label}
-          component={renderTextField}
-          type={input.type}
-        />
-      );
-    case INPUT_TYPES.CHECKBOX:
-      return (
-        <Field
-          id={input.key}
-          name={input.key}
-          label={input.label}
-          component={renderCheckbox}
-        />
-      );
-    default:
-      return null;
-  }
-};
-
-// eslint-disable-next-line react/prop-types
-// const renderSessions = ({ fields }: any) => (
-//   <Fragment>
-//     {fields.map((member: any, index: any) => (
-//       // eslint-disable-next-line react/no-array-index-key
-//       <div key={index}>
-//         <Field
-//           name={`${member}.name`}
-//           label="Name*"
-//           component={renderTextField}
-//           type="text"
-//         />
-
-//         <Field
-//           name={`${member}.length`}
-//           label="Length*"
-//           component={renderTextField}
-//           type="number"
-//         />
-
-//         <RemoveIcon disabled={fields.length <= 1}>
-//           <CloseIcon onClick={() => (fields.length > 1) && fields.remove(index)} />
-//         </RemoveIcon>
-//       </div>
-//     ))}
-
-//     <Button
-//       onClick={() => fields.push({ id: shortid.generate() })}
-//       modifier={Button.MODIFIERS.DARK}
-//     >
-//       Add session
-//     </Button>
-//   </Fragment>
-// );
-
-interface IInput {
-  label: string,
-  type: INPUT_TYPES,
-  key: SETTINGS_KEYS,
+interface ISessionProps {
+  data: ISession
+  disableRemove: boolean
+  onRemove: Function
+  onChange: (session: ISession) => void
 }
+const Session: React.FC<ISessionProps> = ({ data, disableRemove, onRemove, onChange }) => {
+  const { name, length } = data
+  const onRemoveClick = useCallback(
+    () => {
+      if (!disableRemove) {
+        onRemove()
+      }
+    },
+    [onRemove, disableRemove],
+  )
+  const handleChange = (name: keyof ISession) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const session = { ...data }
+    if (name === 'length') {
+      session[name] = parseInt(event.target.value, 10)
+    } else {
+      session[name] = event.target.value
+    }
+    onChange(session)
+  }
+
+  return (
+    <>
+      <TextField
+        id="session-name"
+        label="Name*"
+        value={name}
+        onChange={handleChange('name')}
+        error={name.length === 0}
+      />
+      <TextField
+        id="session-length"
+        label="Length*"
+        value={length}
+        type="number"
+        onChange={handleChange('length')}
+      />
+
+      <RemoveIcon disabled={disableRemove}>
+        <CloseIcon onClick={onRemoveClick} />
+      </RemoveIcon>
+    </>
+  )
+}
+
+interface ISessionsProps {
+  fields: ISession[]
+  onRemove: (index: number) => void
+  onAdd: () => void
+  onChange: (sessions: ISession[]) => void
+}
+const Sessions: React.FC<ISessionsProps> = ({ fields, onRemove, onAdd, onChange }) => {
+  const disableRemove = fields.length <= 1
+  const handleChange = (index: number) => (session: ISession) => {
+    const sessions = [...fields]
+    sessions.splice(index, 1, session)
+    onChange(sessions)
+  }
+
+  return (
+    <>
+      {fields.map((member, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={index}>
+          <Session
+            data={member}
+            disableRemove={disableRemove}
+            onRemove={() => onRemove(index)}
+            onChange={handleChange(index)}
+          />
+        </div>
+      ))}
+
+      <Button
+        onClick={onAdd}
+        modifier={Button.MODIFIERS.DARK}
+      >
+        Add session
+      </Button>
+    </>
+  )
+}
+
 interface ISettingsProps {
-  onSubmit: Function;
-  // hideSettings: Function;
-  inputs: IInput[];
+  onSubmit: (settings: ISettings) => void
+  hideSettings: Function
+  settings: ISettings
 }
-class Settings extends PureComponent<ISettingsProps> {
-  // static propTypes = {
-  //   handleSubmit: PropTypes.func,
-  //   hideSettings: PropTypes.func,
-  //   valid: PropTypes.bool.isRequired,
-  //   inputs: PropTypes.arrayOf(PropTypes.shape({
-  //     label: PropTypes.string,
-  //     type: PropTypes.string,
-  //     key: PropTypes.string,
-  //   })).isRequired,
-  // };
+const Settings: React.FC<ISettingsProps> = (props) => {
+  const {
+    hideSettings,
+    onSubmit,
+    settings,
+  } = props
+  const { sessions } = settings
+  const [localSessions, setSessions] = useState<ISession[]>([])
+  const [localSettings, setSettings] = useState<ISettings>(settings)
+  const onAdd = useCallback(
+    () => {
+      localSessions.push({ id: shortid.generate(), name: '', length: 0 })
+      setSessions([...localSessions])
+    },
+    [localSessions],
+  )
+  const onRemove = useCallback(
+    (index) => {
+      localSessions.splice(index, 1)
+      setSessions([...localSessions])
+    },
+    [localSessions],
+  )
 
-  // static defaultProps = {
-  //   handleSubmit: () => {},
-  //   hideSettings: () => {},
-  // };
+  useEffect(
+    () => {
+      setSessions([...sessions])
+    },
+    [sessions],
+  )
+  useEffect(
+    () => {
+      setSettings(settings)
+    },
+    [settings],
+  )
 
-  // state = {};
+  const onSaveClick = useCallback(
+    () => {
+      onSubmit({
+        ...localSettings,
+        sessions: localSessions,
+      })
+      hideSettings()
+    },
+    [onSubmit, hideSettings, localSessions, localSettings],
+  )
+  const onClose = useCallback(
+    () => {
+      hideSettings()
+    },
+    [hideSettings],
+  )
+  const onChange = useCallback(
+    (sessions: ISession[]) => {
+      setSessions(sessions)
+    },
+    [setSessions],
+  )
+  const onPlaySoundChange = useCallback(
+    (_, checked: boolean) => {
+      setSettings({
+        ...localSettings,
+        playSound: checked,
+      })
+    },
+    [setSettings, localSettings],
+  )
 
-  // onSaveClick() {
-  //   const {
-  //     handleSubmit,
-  //     hideSettings,
-  //   } = this.props;
+  return (
+    <PopupWrapper>
+      <Popup>
+        <PopupTitle>
+          Settings
+        </PopupTitle>
+        <CloseIconWrapper>
+          <CloseIcon onClick={onClose} />
+        </CloseIconWrapper>
+        <FormWrapper>
+          <Typography variant="subtitle1" gutterBottom>
+            Sessions:
+          </Typography>
+          <Sessions fields={localSessions} onAdd={onAdd} onRemove={onRemove} onChange={onChange} />
 
-  //   handleSubmit();
-  //   hideSettings();
-  // }
+          <div>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  onChange={onPlaySoundChange}
+                  color="primary"
+                  checked={localSettings.playSound}
+                />
+              )}
+              label="Play sound"
+            />
+          </div>
 
-  render() {
-    // const {
-    //   hideSettings,
-    //   handleSubmit,
-    //   inputs,
-    //   valid,
-    // } = this.props;
-
-    // return (
-    //   <form onSubmit={handleSubmit}>
-    //     <PopupWrapper>
-    //       <Popup>
-    //         <PopupTitle>
-    //           Settings
-    //         </PopupTitle>
-    //         <CloseIconWrapper>
-    //           <CloseIcon onClick={hideSettings} />
-    //         </CloseIconWrapper>
-    //         <FormWrapper>
-    //           <Typography variant="subheading" gutterBottom>
-    //             Sessions:
-    //           </Typography>
-    //           <FieldArray
-    //             name="sessions"
-    //             component={renderSessions}
-    //           />
-
-    //           {inputs.map(input => (
-    //             <InputLabel
-    //               key={input.key}
-    //               htmlFor={input.key}
-    //             >
-    //               <InputWrapper>
-    //                 {getInputByType(input)}
-    //               </InputWrapper>
-    //             </InputLabel>
-    //           ))}
-
-    //         </FormWrapper>
-    //         <PopupControls>
-    //           <Button
-    //             onClick={() => this.onSaveClick()}
-    //             modifier={Button.MODIFIERS.DARK}
-    //             disabled={!valid}
-    //           >
-    //             Save
-    //           </Button>
-    //         </PopupControls>
-    //       </Popup>
-    //     </PopupWrapper>
-    //   </form>
-    // );
-    return <div>Settings</div>
-  }
+        </FormWrapper>
+        <PopupControls>
+          <Button
+            onClick={() => onSaveClick()}
+            modifier={Button.MODIFIERS.DARK}
+          >
+            Save
+          </Button>
+        </PopupControls>
+      </Popup>
+    </PopupWrapper>
+  )
 }
 
 export default Settings
-// export default reduxForm<ISettingsProps, ISettingsProps>({
-//   form: 'settings',
-//   validate: settingsFormValidator,
-// })(Settings);
