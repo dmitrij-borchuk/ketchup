@@ -1,18 +1,23 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Component from './index';
+import { App } from './app.component';
 
-jest.mock('../Settings/container');
+jest.mock('../Settings/settings.container');
 
 describe('App component', () => {
   it('should render application', () => {
     const rendered = shallow(
-      <Component
+      <App
         showSettings={() => {}}
         settingsPopupShown={false}
         sessions={[]}
         setCurrentSession={() => {}}
+        currentSession={{
+          id: 'id',
+          name: 'name',
+          length: 300,
+        }}
       />,
     );
 

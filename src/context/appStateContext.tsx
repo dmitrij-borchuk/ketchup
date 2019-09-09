@@ -63,7 +63,6 @@ export type Action =
   | { type: ACTIONS.DECREASE_TIMER }
 
 function reducer(state: IAppState, action: Action): IAppState {
-  console.log('=-= action', action)
   switch (action.type) {
     case ACTIONS.SET_SETTINGS:
       return {
