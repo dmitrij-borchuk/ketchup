@@ -353,6 +353,7 @@ describe('Application', () => {
     fireEvent.click(sessionOption)
     expect(timerEl.innerHTML).toBe('29:00')
   })
+
   it('should play the sound', async () => {
     throw new Error('Not implemented')
   })

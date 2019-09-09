@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { render } from 'enzyme';
-import Component from './index';
+import Component from './timer.component';
 
 const secondsInMinute = 60;
 

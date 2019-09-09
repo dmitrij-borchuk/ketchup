@@ -1,18 +1,12 @@
 
-// import React from 'react';
-// import { shallow } from 'enzyme';
-// import Container from './container';
+import React from 'react';
+import { shallow } from 'enzyme';
+import { TimerContainer } from './timer.container';
 
-// describe('Timer container', () => {
-//   it('should show time', () => {
-//     const store = createStore(() => {});
+describe('Timer container', () => {
+  it('should show time', () => {
+    const rendered = shallow(<TimerContainer />);
 
-//     const rendered = shallow(
-//       <Provider store={store}>
-//         <Container />
-//       </Provider>,
-//     );
-
-//     expect(rendered.text()).toEqual('<Connect(TimerContainer) />');
-//   });
-// });
+    expect(rendered.text()).toEqual('<Timer />');
+  });
+});
