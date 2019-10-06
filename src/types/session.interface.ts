@@ -3,6 +3,10 @@ export interface ISession {
   name: string
   length: number
 }
+export interface INewSession {
+  name: string
+  length: number
+}
 export interface ISessionForm {
   id: string
   name: string

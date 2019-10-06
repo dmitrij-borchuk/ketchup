@@ -1,12 +1,16 @@
 import React from 'react'
-import { render, fireEvent, getByRole, waitForElement, act } from '@testing-library/react'
+import { render, fireEvent, getByRole, act, cleanup } from '@testing-library/react'
 // add custom jest matchers from jest-dom
 import '@testing-library/jest-dom/extend-expect'
 import { AppContainer } from './components/App/app.container'
 import { AppProviders } from './providers'
 import { AppStateContextProvider, IAppState, StorageContext } from './context'
 import { LOCAL_STORAGE_KEYS } from './constants'
-import { getStorageContextValueMock } from './testHelpers/storageMock'
+import { getStorageContextValueMock, getStorageMock } from './testHelpers/storageMock'
+import { getPageMethods } from './testHelpers/pages/timerPage'
+import * as soundManager from './utils/soundManager'
+
+jest.mock('./utils/soundManager', () => ({ playSound: jest.fn() }))
 
 const getStateMock = (): IAppState => {
   return {
@@ -36,7 +40,7 @@ const getStateWithSessionMock = (): IAppState => {
 
 const testJsx = (
   storageContextValueMock: {
-    setItem: () => void;
+    setItem: (key: string, data: any) => void;
     getItem: <T>(key: string) => any;
   },
   data: IAppState,
@@ -322,15 +326,7 @@ describe('Application', () => {
       }
       return null
     })
-    const { getByTestId, getByText } = render(
-      <AppProviders>
-        <StorageContext.Provider value={storageContextValueMock}>
-          <AppStateContextProvider value={data}>
-            <AppContainer />
-          </AppStateContextProvider>
-        </StorageContext.Provider>
-      </AppProviders>,
-    )
+    const { getByTestId, getByText } = render(testJsx(storageContextValueMock, data))
     const timerEl = getByTestId('timer')
     expect(timerEl.innerHTML).toBe('30:00')
     const startBtnContainer = getByTestId('start-btn')
@@ -355,12 +351,75 @@ describe('Application', () => {
   })
 
   it('should play the sound', async () => {
-    throw new Error('Not implemented')
+    jest.useFakeTimers()
+    const data = getStateWithSessionMock()
+    data.settings.playSound = true
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
+    })
+    const renderResult = render(testJsx(storageMock, data))
+    const { getStartBtn } = getPageMethods(renderResult)
+
+    const startBtn = getStartBtn()
+    fireEvent.click(startBtn)
+    act(() => {
+      jest.advanceTimersByTime(1800000)
+    })
+
+    expect(playSound).toHaveBeenCalled()
   })
+
   it('shouldn\'t play the sound', async () => {
-    throw new Error('Not implemented')
+    jest.useFakeTimers()
+    const playSoundSpy = jest.spyOn(soundManager, 'playSound')
+    const data = getStateWithSessionMock()
+    data.settings.playSound = false
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
+    })
+    const renderResult = render(testJsx(storageMock, data))
+    const { getStartBtn } = getPageMethods(renderResult)
+
+    const startBtn = getStartBtn()
+    fireEvent.click(startBtn)
+    act(() => {
+      jest.advanceTimersByTime(1800000)
+    })
+
+    expect(playSoundSpy).not.toHaveBeenCalled()
   })
+
   it('should load last selected session', async () => {
-    throw new Error('Not implemented')
+    const data = getStateMock()
+    data.settings.sessions = [
+      {
+        name: 'test1',
+        length: 1800, // 30 min
+        id: 'id1',
+      },
+      {
+        name: 'test2',
+        length: 300, // 5 min
+        id: 'id2',
+      },
+    ]
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
+    })
+    let renderResult = render(testJsx(storageMock, data))
+    let pageMethods = getPageMethods(renderResult)
+
+    let sessionSelectBtn = pageMethods.getSessionsSelect()
+    fireEvent.click(sessionSelectBtn)
+    const sessionOption = renderResult.getByText(data.settings.sessions[1].name)
+    fireEvent.click(sessionOption)
+
+    cleanup()
+
+    renderResult = render(testJsx(storageMock, data))
+    pageMethods = getPageMethods(renderResult)
+    sessionSelectBtn = pageMethods.getSessionsSelect()
+
+    expect(sessionSelectBtn).toHaveTextContent(data.settings.sessions[1].name)
   })
 })

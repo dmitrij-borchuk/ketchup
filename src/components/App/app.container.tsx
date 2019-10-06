@@ -29,7 +29,7 @@ export interface IAppContainerProps {
 export const AppContainer: React.FC<IAppContainerProps> = () => {
   const { state, dispatch } = useContext(AppStateContext)
   const { settings: { sessions }, currentSession, settingsPopupShown } = state
-  const { getItem } = useContext(StorageContext)
+  const { getItem, setItem } = useContext(StorageContext)
   const showSettings = useCallback(
     () => {
       dispatch({
@@ -40,13 +40,14 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
     [dispatch],
   )
   const setCurrentSession = useCallback(
-    (session) => {
+    (session: ISession) => {
       dispatch({
         type: ACTIONS.SET_CURRENT_SESSION,
         payload: session,
       })
+      setItem(LOCAL_STORAGE_KEYS.LAST_SESSION_ID, session.id)
     },
-    [dispatch],
+    [dispatch, setItem],
   )
 
   useEffect(
