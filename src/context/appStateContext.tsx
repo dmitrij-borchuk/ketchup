@@ -48,7 +48,7 @@ export enum ACTIONS {
   SET_SETTINGS_VISIBILITY = 'SET_SETTINGS_VISIBILITY',
   TIMER_SET_TIME = 'TIMER_SET_TIME',
   START_TIMER = 'START_TIMER',
-  STOP_TIMER2 = 'STOP_TIMER2',
+  STOP_TIMER = 'STOP_TIMER',
   RESET_TIMER = 'RESET_TIMER',
   DECREASE_TIMER = 'DECREASE_TIMER',
 }
@@ -58,7 +58,7 @@ export type Action =
   | { type: ACTIONS.SET_SETTINGS_VISIBILITY, payload: boolean }
   | { type: ACTIONS.TIMER_SET_TIME, payload: number }
   | { type: ACTIONS.START_TIMER }
-  | { type: ACTIONS.STOP_TIMER2 }
+  | { type: ACTIONS.STOP_TIMER }
   | { type: ACTIONS.RESET_TIMER }
   | { type: ACTIONS.DECREASE_TIMER }
 
@@ -106,7 +106,7 @@ function reducer(state: IAppState, action: Action): IAppState {
           isFinished: false,
         },
       }
-    case ACTIONS.STOP_TIMER2:
+    case ACTIONS.STOP_TIMER:
       return {
         ...state,
         timer: {
