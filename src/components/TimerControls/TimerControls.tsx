@@ -4,7 +4,7 @@ import React, { Fragment } from 'react'
 import Button from '../Button'
 
 interface ITimerControlsProps {
-  isStarted?: boolean,
+  isRunning?: boolean,
   onStartClick?: EventListener,
   onPauseClick?: EventListener,
   onFinishClick?: EventListener,
@@ -12,24 +12,15 @@ interface ITimerControlsProps {
 
 export const TimerControls: React.FC<ITimerControlsProps> = (props) => {
   const {
-    isStarted = false,
+    isRunning = false,
     onStartClick = () => {},
     onPauseClick = () => {},
     onFinishClick = () => {},
   } = props
-  // const className = cn(css.button, css[type.toLowerCase()])
 
-  // return (
-  //   <button
-  //     className={className}
-  //     onClick={onClick}
-  //   >
-  //     {children}
-  //   </button>
-  // )
   return (
     <Fragment>
-      {!isStarted
+      {!isRunning
         && (
           <span data-testid="start-btn">
             <Button
@@ -41,7 +32,7 @@ export const TimerControls: React.FC<ITimerControlsProps> = (props) => {
           </span>
         )
       }
-      {isStarted
+      {isRunning
         && (
           <span data-testid="pause-btn">
             <Button
@@ -64,21 +55,3 @@ export const TimerControls: React.FC<ITimerControlsProps> = (props) => {
     </Fragment>
   )
 }
-// Button.TYPES = {
-//   PRIMARY: 'PRIMARY',
-// }
-
-// TimerControls.propTypes = {
-//   isStarted: PropTypes.bool,
-//   onStartClick: PropTypes.func,
-//   onPauseClick: PropTypes.func,
-//   onFinishClick: PropTypes.func,
-// }
-
-// TimerControls.defaultProps = {
-//   isStarted: false,
-//   onStartClick: () => {},
-//   onPauseClick: () => {},
-//   onFinishClick: () => {},
-//   // type: Button.TYPES.PRIMARY,
-// }
