@@ -4,14 +4,16 @@ import { ISession } from '../types/session.interface'
 
 export interface ITimerState {
   seconds: number
-  isStarted: boolean
+  isRunning: boolean
   isFinished: boolean
+  endTime: number
 }
 
 const defaultTimerState: ITimerState = {
   seconds: 0,
-  isStarted: false,
+  isRunning: false,
   isFinished: true,
+  endTime: 0,
 }
 
 const defaultState: IAppState = {
@@ -44,6 +46,7 @@ export interface IAppState {
 
 export enum ACTIONS {
   SET_SETTINGS = 'SET_SETTINGS',
+  SET_TIMER_STATE = 'SET_TIMER_STATE',
   SET_CURRENT_SESSION = 'SET_CURRENT_SESSION',
   SET_SETTINGS_VISIBILITY = 'SET_SETTINGS_VISIBILITY',
   TIMER_SET_TIME = 'TIMER_SET_TIME',
@@ -54,6 +57,7 @@ export enum ACTIONS {
 }
 export type Action =
   | { type: ACTIONS.SET_SETTINGS, payload: ISettings }
+  | { type: ACTIONS.SET_TIMER_STATE, payload: ITimerState }
   | { type: ACTIONS.SET_CURRENT_SESSION, payload: ISession }
   | { type: ACTIONS.SET_SETTINGS_VISIBILITY, payload: boolean }
   | { type: ACTIONS.TIMER_SET_TIME, payload: number }
@@ -63,11 +67,21 @@ export type Action =
   | { type: ACTIONS.DECREASE_TIMER }
 
 function reducer(state: IAppState, action: Action): IAppState {
+  const now = Date.now()
+
   switch (action.type) {
     case ACTIONS.SET_SETTINGS:
       return {
         ...state,
         settings: action.payload,
+      }
+    case ACTIONS.SET_TIMER_STATE:
+      return {
+        ...state,
+        timer: {
+          ...state.timer,
+          ...action.payload,
+        },
       }
     case ACTIONS.SET_CURRENT_SESSION:
       if (state.timer.isFinished) {
@@ -102,16 +116,19 @@ function reducer(state: IAppState, action: Action): IAppState {
         ...state,
         timer: {
           ...state.timer,
-          isStarted: true,
+          isRunning: true,
           isFinished: false,
+          endTime: now + (state.timer.seconds * 1000),
         },
       }
     case ACTIONS.STOP_TIMER:
+      const { endTime } = state.timer
       return {
         ...state,
         timer: {
           ...state.timer,
-          isStarted: false,
+          isRunning: false,
+          endTime: 0,
         },
       }
     case ACTIONS.RESET_TIMER:
@@ -119,7 +136,7 @@ function reducer(state: IAppState, action: Action): IAppState {
         ...state,
         timer: {
           ...state.timer,
-          isStarted: false,
+          isRunning: false,
           isFinished: true,
           seconds: state.currentSession ? state.currentSession.length : 0,
         },

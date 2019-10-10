@@ -17,7 +17,7 @@ describe('Timer controls', () => {
   });
   it('should render Pause button', () => {
     const rendered = render(
-      <TimerControls isStarted />,
+      <TimerControls isRunning />,
     );
 
     expect(rendered.text().search(pauseText)).not.toEqual(-1);
@@ -38,7 +38,7 @@ describe('Timer controls', () => {
     expect(hasStart && hasPause).not.toEqual(true);
 
     rendered = render(
-      <TimerControls isStarted />,
+      <TimerControls isRunning />,
     );
     hasStart = rendered.text().search(startText) >= 0;
     hasPause = rendered.text().search(pauseText) >= 0;
@@ -62,7 +62,7 @@ describe('Timer controls', () => {
     const rendered = shallow(
       <TimerControls
         onPauseClick={cb}
-        isStarted
+        isRunning
       />,
     );
     const button = rendered.find('Button').filterWhere(wrap => wrap.props().children === pauseText);

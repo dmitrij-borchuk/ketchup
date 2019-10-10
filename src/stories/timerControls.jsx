@@ -19,10 +19,10 @@ storiesOf('TimerControls (need to add bg)', module)
       />
     </Container>
   ))
-  .add('isStarted', () => (
+  .add('isRunning', () => (
     <Container>
       <TimerControls
-        isStarted
+        isRunning
         onStartClick={action('onStart Clicked')}
         onPauseClick={action('onPause Clicked')}
         onFinishClick={action('onFinish Clicked')}

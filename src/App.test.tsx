@@ -21,8 +21,9 @@ const getStateMock = (): IAppState => {
     settingsPopupShown: false,
     timer: {
       seconds: 0,
-      isStarted: false,
+      isRunning: false,
       isFinished: true,
+      endTime: 0,
     },
   }
 }
@@ -149,20 +150,15 @@ describe('Application', () => {
     jest.useFakeTimers()
 
     const data = getStateWithSessionMock()
-    const storageContextValueMock = getStorageContextValueMock((key: string) => {
-      if (key === LOCAL_STORAGE_KEYS.SETTINGS) {
-        return data.settings
-      }
-      return null
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
     })
-    const { getByTestId } = render(testJsx(storageContextValueMock, data))
-    const timerEl = getByTestId('timer')
-    const startBtnContainer = getByTestId('start-btn')
-    const startBtn = startBtnContainer.children[0]
+    const renderResult = render(testJsx(storageMock, data))
+    const { getTimerElement, getStartBtn } = getPageMethods(renderResult)
+    const timerEl = getTimerElement()
+    const startBtn = getStartBtn()
     expect(timerEl.innerHTML).toBe('30:00')
-    act(() => {
-      fireEvent.click(startBtn)
-    })
+    fireEvent.click(startBtn)
 
     act(() => {
       jest.advanceTimersByTime(1000)
@@ -352,6 +348,7 @@ describe('Application', () => {
 
   it('should play the sound', async () => {
     jest.useFakeTimers()
+    const playSoundSpy = jest.spyOn(soundManager, 'playSound')
     const data = getStateWithSessionMock()
     data.settings.playSound = true
     const storageMock = getStorageMock({
@@ -366,12 +363,13 @@ describe('Application', () => {
       jest.advanceTimersByTime(1800000)
     })
 
-    expect(playSound).toHaveBeenCalled()
+    expect(playSoundSpy).toHaveBeenCalled()
   })
 
   it('shouldn\'t play the sound', async () => {
     jest.useFakeTimers()
     const playSoundSpy = jest.spyOn(soundManager, 'playSound')
+    playSoundSpy.mockReset()
     const data = getStateWithSessionMock()
     data.settings.playSound = false
     const storageMock = getStorageMock({
@@ -421,5 +419,48 @@ describe('Application', () => {
     sessionSelectBtn = pageMethods.getSessionsSelect()
 
     expect(sessionSelectBtn).toHaveTextContent(data.settings.sessions[1].name)
+  })
+
+  it('should continue timer after reload', async () => {
+    let now = Date.now()
+    const nowSpy = jest.spyOn(Date, 'now')
+    jest.useFakeTimers()
+    const data = getStateMock()
+    data.settings.sessions = [
+      {
+        name: 'test1',
+        length: 1800, // 30 min
+        id: 'id1',
+      },
+    ]
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
+    })
+    const renderResultBefore = render(testJsx(storageMock, data))
+    const pageMethodsBefore = getPageMethods(renderResultBefore)
+    fireEvent.click(pageMethodsBefore.getStartBtn())
+
+    now += 1000
+    nowSpy.mockReturnValue(now)
+    act(() => {
+      jest.advanceTimersByTime(1 * 1000)
+    })
+    renderResultBefore.unmount()
+    now += 1000
+    nowSpy.mockReturnValue(now)
+    act(() => {
+      jest.advanceTimersByTime(1 * 1000)
+    })
+    const renderResult = render(testJsx(storageMock, data))
+    const { getTimerElement } = getPageMethods(renderResult)
+    const timerEl = getTimerElement()
+
+    expect(timerEl.innerHTML).toBe('29:58')
+    now += 1000
+    nowSpy.mockReturnValue(now)
+    act(() => {
+      jest.advanceTimersByTime(1 * 1000)
+    })
+    expect(timerEl.innerHTML).toBe('29:57')
   })
 })

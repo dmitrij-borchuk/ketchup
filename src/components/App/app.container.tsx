@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useCallback } from 'react'
 import shortid from 'shortid'
 import { App } from './app.component'
-import { AppStateContext, ACTIONS, StorageContext } from '../../context'
+import { AppStateContext, ACTIONS, StorageContext, ITimerState } from '../../context'
 import {
   LOCAL_STORAGE_KEYS,
   DEFAULT_SESSION_LENGTH,
@@ -28,7 +28,8 @@ export interface IAppContainerProps {
 }
 export const AppContainer: React.FC<IAppContainerProps> = () => {
   const { state, dispatch } = useContext(AppStateContext)
-  const { settings: { sessions }, currentSession, settingsPopupShown } = state
+  const { settings: { sessions }, currentSession, settingsPopupShown, timer } = state
+  const { endTime, seconds, isFinished, isRunning } = timer
   const { getItem, setItem } = useContext(StorageContext)
   const showSettings = useCallback(
     () => {
@@ -54,6 +55,7 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
     () => {
       const settings = getItem<ISettings>(LOCAL_STORAGE_KEYS.SETTINGS) || defaultSettings
       const lastSessionId = getItem<string>(LOCAL_STORAGE_KEYS.LAST_SESSION_ID)
+      const timerState = getItem<ITimerState>(LOCAL_STORAGE_KEYS.TIMER_STATE)
       const processedSessions = processSessions(settings.sessions)
       const defaultSession = processedSessions[0]
       const lastSession = processedSessions.find(ses => ses.id === lastSessionId)
@@ -70,13 +72,38 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
         type: ACTIONS.SET_CURRENT_SESSION,
         payload: sessionToSet,
       })
+      if (timerState) {
+        const now = Date.now()
+        const timerSeconds = timerState.isRunning
+        ? Math.round((timerState.endTime - now) / 1000)
+        : timerState.seconds
+        const timerStateToSet = {
+          isRunning: false,
+          isFinished: true,
+          ...(timerState || {}),
+          seconds: timerSeconds,
+        }
+        dispatch({
+          type: ACTIONS.SET_TIMER_STATE,
+          payload: {
+            ...timer,
+            ...timerStateToSet,
+          },
+        })
+      } else {
+        dispatch({
+          type: ACTIONS.TIMER_SET_TIME,
+          payload: sessionToSet.length,
+        })
+      }
 
-      dispatch({
-        type: ACTIONS.TIMER_SET_TIME,
-        payload: sessionToSet.length,
-      })
     },
     [dispatch, getItem],
+  )
+
+  useEffect(
+    () => setItem(LOCAL_STORAGE_KEYS.TIMER_STATE, timer),
+    [endTime, seconds, isFinished, isRunning],
   )
 
   if (!currentSession) {

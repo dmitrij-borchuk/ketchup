@@ -7,7 +7,8 @@ import alarmSound from '../../assets/sounds/Twin-bell-alarm-clock-ringing-short.
 
 export const TimerControlsContainer: React.FC = () => {
   const { state, dispatch } = useContext(AppStateContext)
-  const { timer: { isStarted, seconds }, settings: { playSound: isPlaySound } } = state
+  const { timer, settings: { playSound: isPlaySound } } = state
+  const { isRunning, seconds } = timer
   const onTick = useCallback(
     () => {
       const newSeconds = seconds - 1
@@ -37,13 +38,13 @@ export const TimerControlsContainer: React.FC = () => {
   return (
     <>
       <TimerControls
-        isStarted={isStarted}
+        isRunning={isRunning}
         onStartClick={onStartClick}
         onPauseClick={onPauseClick}
         onFinishClick={onFinishClick}
       />
       <TimerCounter
-        enabled={isStarted}
+        enabled={isRunning}
         onTick={onTick}
       />
     </>

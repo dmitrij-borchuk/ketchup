@@ -1,4 +1,7 @@
-export const getStorageContextValueMock = (getFn: Function, setFn?: Function) => {
+export const getStorageContextValueMock = (
+  getFn: Function,
+  setFn?: (key: string, data: any) => void,
+) => {
   return {
     setItem: setFn || (() => {}),
     getItem: <T>(key: string) => {
