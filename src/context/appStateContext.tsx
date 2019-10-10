@@ -122,7 +122,6 @@ function reducer(state: IAppState, action: Action): IAppState {
         },
       }
     case ACTIONS.STOP_TIMER:
-      const { endTime } = state.timer
       return {
         ...state,
         timer: {
