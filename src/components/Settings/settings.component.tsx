@@ -55,7 +55,7 @@ const Session: React.FC<ISessionProps> = ({
           {name}:&nbsp;
         </div>
         <div>
-          {length}ms
+          {length} s
         </div>
 
         <RemoveIcon disabled={disableRemove}>
