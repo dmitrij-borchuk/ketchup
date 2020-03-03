@@ -98,11 +98,13 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
       }
 
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch, getItem],
   )
 
   useEffect(
     () => setItem(LOCAL_STORAGE_KEYS.TIMER_STATE, timer),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [endTime, seconds, isFinished, isRunning],
   )
 
