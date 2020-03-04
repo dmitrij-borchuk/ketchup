@@ -18,7 +18,7 @@ export interface ISettingsContainerProps {
 export const SettingsContainer: React.FC<ISettingsContainerProps> = () => {
   const { state, dispatch } = useContext(AppStateContext)
   const { setItem } = useContext(StorageContext)
-  const { timer: { isFinished }, currentSession, settings } = state
+  const { timer: { isFinished }, currentSession, settings, settingsPopupShown } = state
   const hideSettings = useCallback(
     () => dispatch({
       type: ACTIONS.SET_SETTINGS_VISIBILITY,
@@ -56,13 +56,17 @@ export const SettingsContainer: React.FC<ISettingsContainerProps> = () => {
     [dispatch, currentSession, isFinished, setItem],
   )
 
-  return (
-    <MuiThemeProvider theme={theme}>
-      <Component
-        settings={settings}
-        hideSettings={hideSettings}
-        onSubmit={onSubmit}
-      />
-    </MuiThemeProvider>
-  )
+  if (settingsPopupShown) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Component
+          settings={settings}
+          hideSettings={hideSettings}
+          onSubmit={onSubmit}
+        />
+      </MuiThemeProvider>
+    )
+  }
+
+  return null;
 }

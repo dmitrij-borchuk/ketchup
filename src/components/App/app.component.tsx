@@ -21,7 +21,6 @@ const webmanifest = require('../../assets/favicon/site.webmanifest')
 
 interface IAppProps {
   showSettings: Function,
-  settingsPopupShown: boolean,
   sessions: ISession[],
   currentSession: ISession,
   setCurrentSession: Function,
@@ -29,7 +28,6 @@ interface IAppProps {
 export const App: React.FC<IAppProps> = (props) => {
   const {
     showSettings,
-    settingsPopupShown,
     sessions,
     currentSession,
     setCurrentSession,
@@ -86,10 +84,7 @@ export const App: React.FC<IAppProps> = (props) => {
       </Circle>
 
       {/* Settings */ }
-      {
-        settingsPopupShown
-        && <SettingsContainer />
-      }
+      <SettingsContainer />
 
     </AppWrapper>
   )
