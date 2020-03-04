@@ -30,10 +30,15 @@ export const InputWrapper = styled.div`
 interface IIconProps {
   disabled: boolean
 }
-export const RemoveIcon = styled.span<IIconProps>`
+export const IconWrapper = styled.span<IIconProps>`
   ${props => (props.disabled ? 'opacity: 0.3;' : 'cursor: pointer;')}
 `
 
 export const SessionContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+`
+
+export const SessionControls = styled.span`
+
 `

@@ -16,12 +16,14 @@ import {
   CloseIconWrapper,
   PopupWrapper,
   FormWrapper,
-  RemoveIcon,
+  IconWrapper,
   SessionContainer,
+  SessionControls,
 } from './styles'
 import { ISession } from '../../types/session.interface'
 import { ISettings } from '../../types'
 import { SessionEdit } from '../SessionEdit'
+import { Flex } from '../../commonStyles'
 
 interface ISessionProps {
   data: ISession
@@ -38,7 +40,6 @@ const Session: React.FC<ISessionProps> = ({
   onEditClick,
 }) => {
   const { name, length } = data
-  // const [showEdit, setShowEdit] = useState(false)
   const onRemoveClick = useCallback(
     () => {
       if (!disableRemove) {
@@ -51,20 +52,30 @@ const Session: React.FC<ISessionProps> = ({
   return (
     <>
       <SessionContainer>
-        <div>
-          {name}:&nbsp;
-        </div>
-        <div>
-          {length} s
-        </div>
+        <Flex>
+          <div>
+            {name}:&nbsp;
+          </div>
+          <div>
+            {length} s
+          </div>
+        </Flex>
 
-        <RemoveIcon disabled={disableRemove}>
-          <EditIcon onClick={onEditClick} />
-        </RemoveIcon>
+        <SessionControls>
+          <IconWrapper disabled={disableRemove}>
+            <EditIcon
+              onClick={onEditClick}
+              color="#424242"
+            />
+          </IconWrapper>
 
-        <RemoveIcon disabled={disableRemove}>
-          <DeleteIcon onClick={onRemoveClick} />
-        </RemoveIcon>
+          <IconWrapper disabled={disableRemove}>
+            <DeleteIcon
+              onClick={onRemoveClick}
+              color="#424242"
+            />
+          </IconWrapper>
+        </SessionControls>
       </SessionContainer>
       {/* {showEdit && (
         <SessionEdit
@@ -75,29 +86,6 @@ const Session: React.FC<ISessionProps> = ({
       )} */}
     </>
   )
-
-  // return (
-  //   <>
-  //     <TextField
-  //       id="session-name"
-  //       label="Name*"
-  //       value={name}
-  //       onChange={handleChange('name')}
-  //       error={name.length === 0}
-  //     />
-  //     <TextField
-  //       id="session-length"
-  //       label="Length*"
-  //       value={length}
-  //       type="number"
-  //       onChange={handleChange('length')}
-  //     />
-
-  //     <RemoveIcon disabled={disableRemove}>
-  //       <CloseIcon onClick={onRemoveClick} />
-  //     </RemoveIcon>
-  //   </>
-  // )
 }
 
 interface ISessionsProps {
