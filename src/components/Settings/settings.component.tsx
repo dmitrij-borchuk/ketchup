@@ -157,10 +157,13 @@ const Settings: React.FC<ISettingsProps> = (props) => {
   const [sessionToEdit, setSessionToEdit] = useState<ISession | null>(null)
   const onAdd = useCallback(
     () => {
-      localSessions.push({ id: shortid.generate(), name: '', length: 0 })
-      setSessions([...localSessions])
+      setSessionToEdit({
+        length: 0,
+        name: '',
+        id: shortid.generate(),
+      })
     },
-    [localSessions],
+    [],
   )
   const onRemove = useCallback(
     (index) => {
@@ -199,7 +202,11 @@ const Settings: React.FC<ISettingsProps> = (props) => {
     (session: ISession) => {
       const sessions = [...localSessions]
       const index = sessions.findIndex(item => item.id === session.id)
-      sessions.splice(index, 1, session)
+      if (index >= 0) {
+        sessions.splice(index, 1, session)
+      } else {
+        sessions.push(session)
+      }
       onChange(sessions)
       setSessionToEdit(null)
     },

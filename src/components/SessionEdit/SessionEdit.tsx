@@ -71,12 +71,14 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           value={sessionLength}
           type="number"
           onChange={onLengthChange}
+          error={sessionLength <= 0}
         />
       </FormWrapper>
       <PopupControls>
         <Button
           onClick={onSaveClick}
           modifier={Button.MODIFIERS.DARK}
+          disabled={sessionName.length === 0 || sessionLength <= 0}
         >
           Save
         </Button>
