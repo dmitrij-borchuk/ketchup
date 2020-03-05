@@ -1,6 +1,5 @@
 import React from 'react'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { AppStateContextProvider, StorageContextProvider } from './context'
 
 const theme = createMuiTheme({
