@@ -28,7 +28,7 @@ export interface IAppContainerProps {
 }
 export const AppContainer: React.FC<IAppContainerProps> = () => {
   const { state, dispatch } = useContext(AppStateContext)
-  const { settings: { sessions }, currentSession, settingsPopupShown, timer } = state
+  const { settings: { sessions }, currentSession, timer } = state
   const { endTime, seconds, isFinished, isRunning } = timer
   const { getItem, setItem } = useContext(StorageContext)
   const showSettings = useCallback(
@@ -98,11 +98,13 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
       }
 
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch, getItem],
   )
 
   useEffect(
     () => setItem(LOCAL_STORAGE_KEYS.TIMER_STATE, timer),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [endTime, seconds, isFinished, isRunning],
   )
 
@@ -113,7 +115,6 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
   return (
     <App
       showSettings={showSettings}
-      settingsPopupShown={settingsPopupShown}
       sessions={sessions}
       currentSession={currentSession}
       setCurrentSession={setCurrentSession}
