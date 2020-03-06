@@ -17,13 +17,15 @@ import { ISession } from '../../types/session.interface'
 interface ISessionEditProps {
   onSubmit: (session: ISession) => void
   onClose: () => void
-  session?: ISession,
+  session?: ISession
+  open: boolean
 }
 export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
   const {
     onSubmit,
     onClose,
     session,
+    open,
   } = props
   const [sessionName, setSessionName] = useState<string>(session ? session.name : '')
   const [sessionLength, setSessionLength] = useState<number>(session ? session.length : 0)
@@ -50,7 +52,10 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
   const title = `${session ? 'Edit' : 'Create'} session`
 
   return (
-    <Popup>
+    <Popup
+      open={open}
+      handleClose={onClose}
+    >
       <PopupTitle>
         {title}
       </PopupTitle>

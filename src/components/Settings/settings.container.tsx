@@ -55,17 +55,14 @@ export const SettingsContainer: React.FC<ISettingsContainerProps> = () => {
     [dispatch, currentSession, isFinished, setItem],
   )
 
-  if (settingsPopupShown) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <Component
-          settings={settings}
-          hideSettings={hideSettings}
-          onSubmit={onSubmit}
-        />
-      </MuiThemeProvider>
-    )
-  }
-
-  return null;
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Component
+        open={settingsPopupShown}
+        settings={settings}
+        hideSettings={hideSettings}
+        onSubmit={onSubmit}
+      />
+    </MuiThemeProvider>
+  )
 }
