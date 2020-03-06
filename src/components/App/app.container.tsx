@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useCallback } from 'react'
 import shortid from 'shortid'
+import { hot } from 'react-hot-loader'
 import { App } from './app.component'
 import { AppStateContext, ACTIONS, StorageContext, ITimerState } from '../../context'
 import {
@@ -121,3 +122,5 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
     />
   )
 }
+
+export default hot(module)(AppContainer)
