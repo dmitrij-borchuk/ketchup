@@ -34,7 +34,7 @@
     "react-dom": "16.9.0",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.19",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.4.0",
     "shortid": "^2.2.14",
     "styled-components": "^4.3.2",
     "tslint": "^5.19.0",
