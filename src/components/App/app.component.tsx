@@ -66,8 +66,9 @@ export const App: React.FC<IAppProps> = (props) => {
               }
               fullWidth
             >
-              {sessions.map((session: any) => (
+              {sessions.map((session) => (
                 <MenuItem
+                  data-testid={`session-selector-item-${session.name}`}
                   key={session.id}
                   value={session.id}
                 >

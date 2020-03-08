@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Component from './settings.component'
 import { ISettings } from '../../types/settings.interface'
 import { AppStateContext, ACTIONS, StorageContext } from '../../context'
@@ -56,17 +55,14 @@ export const SettingsContainer: React.FC<ISettingsContainerProps> = () => {
     [dispatch, currentSession, isFinished, setItem],
   )
 
-  if (settingsPopupShown) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <Component
-          settings={settings}
-          hideSettings={hideSettings}
-          onSubmit={onSubmit}
-        />
-      </MuiThemeProvider>
-    )
-  }
-
-  return null;
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Component
+        open={settingsPopupShown}
+        settings={settings}
+        hideSettings={hideSettings}
+        onSubmit={onSubmit}
+      />
+    </MuiThemeProvider>
+  )
 }

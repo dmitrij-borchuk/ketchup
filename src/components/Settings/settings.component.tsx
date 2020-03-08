@@ -132,17 +132,19 @@ interface ISettingsProps {
   onSubmit: (settings: ISettings) => void
   hideSettings: () => void
   settings: ISettings
+  open: boolean
 }
 const Settings: React.FC<ISettingsProps> = (props) => {
   const {
     hideSettings,
     onSubmit,
     settings,
+    open,
   } = props
   const { sessions } = settings
   const [localSessions, setSessions] = useState<ISession[]>([])
   const [localSettings, setSettings] = useState<ISettings>(settings)
-  const [sessionToEdit, setSessionToEdit] = useState<ISession | null>(null)
+  const [sessionToEdit, setSessionToEdit] = useState<ISession | undefined>()
   const onAdd = useCallback(
     () => {
       setSessionToEdit({
@@ -196,7 +198,7 @@ const Settings: React.FC<ISettingsProps> = (props) => {
         sessions.push(session)
       }
       onChange(sessions)
-      setSessionToEdit(null)
+      setSessionToEdit(undefined)
     },
     [localSessions, onChange],
   )
@@ -212,56 +214,57 @@ const Settings: React.FC<ISettingsProps> = (props) => {
 
   return (
     <PopupWrapper>
-      {!sessionToEdit && (
-        <Popup>
-          <PopupTitle>
-            Settings
-          </PopupTitle>
-          <CloseIconWrapper>
-            <CloseIcon onClick={hideSettings} />
-          </CloseIconWrapper>
-          <FormWrapper>
-            <Typography variant="subtitle1" gutterBottom>
-              Sessions:
-            </Typography>
-            <Sessions
-              fields={localSessions}
-              onAdd={onAdd}
-              onRemove={onRemove}
-              onChange={onChange}
-              onEditClick={session => setSessionToEdit(session)}
+      <Popup
+        open={open && !sessionToEdit}
+        handleClose={hideSettings}
+      >
+        <PopupTitle>
+          Settings
+        </PopupTitle>
+        <CloseIconWrapper>
+          <CloseIcon onClick={hideSettings} />
+        </CloseIconWrapper>
+        <FormWrapper>
+          <Typography variant="subtitle1" gutterBottom>
+            Sessions:
+          </Typography>
+          <Sessions
+            fields={localSessions}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            onChange={onChange}
+            onEditClick={session => setSessionToEdit(session)}
+          />
+
+          <div>
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  onChange={onPlaySoundChange}
+                  color="primary"
+                  checked={localSettings.playSound}
+                />
+              )}
+              label="Play sound"
             />
+          </div>
 
-            <div>
-              <FormControlLabel
-                control={(
-                  <Checkbox
-                    onChange={onPlaySoundChange}
-                    color="primary"
-                    checked={localSettings.playSound}
-                  />
-                )}
-                label="Play sound"
-              />
-            </div>
-
-          </FormWrapper>
-          <PopupControls>
-            <Button
-              onClick={() => onSaveClick()}
-              modifier={Button.MODIFIERS.DARK}
-            >
-              Save
-            </Button>
-          </PopupControls>
-        </Popup>
-      )}
-      {sessionToEdit && (
-        <SessionEdit
-          onSubmit={onSessionChange}
-          onClose={() => { setSessionToEdit(null) }}
-          session={sessionToEdit}
-        />)}
+        </FormWrapper>
+        <PopupControls>
+          <Button
+            onClick={() => onSaveClick()}
+            modifier={Button.MODIFIERS.DARK}
+          >
+            Save
+          </Button>
+        </PopupControls>
+      </Popup>
+      <SessionEdit
+        open={!!sessionToEdit}
+        onSubmit={onSessionChange}
+        onClose={() => { setSessionToEdit(undefined) }}
+        session={sessionToEdit}
+      />
     </PopupWrapper>
   )
 }
