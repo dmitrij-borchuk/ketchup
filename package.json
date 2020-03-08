@@ -9,7 +9,9 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.12.0",
@@ -25,6 +27,7 @@
     "@types/react-helmet": "^5.0.8",
     "@types/shortid": "^0.0.29",
     "@types/styled-components": "^4.1.16",
+    "cypress": "^4.1.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "normalize.css": "^8.0.1",
