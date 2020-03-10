@@ -7,7 +7,7 @@ export const getPageMethods = (renderResult: RenderResult) => {
       const startBtnContainer = getByTestId('start-btn')
       return startBtnContainer.children[0]
     },
-    getSessionsSelect(): Element {
+    getSessionsSelect(): HTMLElement {
       const sessionSelectorContainer = getByTestId('session-selector')
       return getByRole(
         sessionSelectorContainer,
