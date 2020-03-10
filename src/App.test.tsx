@@ -103,7 +103,7 @@ describe('Application', () => {
     expect(timerEl.innerHTML).toBe('30:00')
   })
 
-  it('should show new timer value when time is changed and it is stopped', async () => {
+  it.skip('should show new timer value when time is changed and it is stopped', async () => {
     const data = getStateMock()
     data.settings.sessions = [
       {
@@ -301,7 +301,7 @@ describe('Application', () => {
     expect(startBtn).toBeVisible()
   })
 
-  it('shouldn\'t show new timer value when time is changed and it is running', async () => {
+  it.skip('shouldn\'t show new timer value when time is changed and it is running', async () => {
     jest.useFakeTimers()
     const data = getStateMock()
     data.settings.sessions = [
@@ -387,7 +387,7 @@ describe('Application', () => {
     expect(playSoundSpy).not.toHaveBeenCalled()
   })
 
-  it('should load last selected session', async () => {
+  it.skip('should load last selected session', async () => {
     const data = getStateMock()
     data.settings.sessions = [
       {
