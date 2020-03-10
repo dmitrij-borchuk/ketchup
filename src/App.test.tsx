@@ -463,4 +463,36 @@ describe('Application', () => {
     })
     expect(timerEl.innerHTML).toBe('29:57')
   })
+
+  it('shouldn\'t show negative timer', async () => {
+    let now = Date.now()
+    const nowSpy = jest.spyOn(Date, 'now')
+    jest.useFakeTimers()
+    const data = getStateMock()
+    data.settings.sessions = [
+      {
+        name: 'test1',
+        length: 5, // 5 sec
+        id: 'id1',
+      },
+    ]
+    const storageMock = getStorageMock({
+      [LOCAL_STORAGE_KEYS.SETTINGS]: data.settings,
+    })
+    const renderResultBefore = render(testJsx(storageMock, data))
+    const pageMethodsBefore = getPageMethods(renderResultBefore)
+    fireEvent.click(pageMethodsBefore.getStartBtn())
+
+    renderResultBefore.unmount()
+    now += 10000
+    nowSpy.mockReturnValue(now)
+    act(() => {
+      jest.advanceTimersByTime(10 * 1000)
+    })
+    const renderResult = render(testJsx(storageMock, data))
+    const { getTimerElement } = getPageMethods(renderResult)
+    const timerEl = getTimerElement()
+
+    expect(timerEl.innerHTML).toBe('00:00')
+  })
 })
