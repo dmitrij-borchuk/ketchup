@@ -10,6 +10,7 @@ export default function Button(props: any) {
     modifier,
     large,
     disabled,
+    ...other
   } = props;
 
   return (
@@ -19,6 +20,7 @@ export default function Button(props: any) {
       modifier={modifier}
       large={large}
       disabled={disabled}
+      {...other}
     >
       {children}
     </Container>

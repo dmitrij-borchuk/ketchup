@@ -121,6 +121,7 @@ const Sessions: React.FC<ISessionsProps> = ({ fields, onRemove, onAdd, onChange,
       <Button
         onClick={onAdd}
         modifier={Button.MODIFIERS.DARK}
+        data-testid="settings-add-session-btn"
       >
         Add session
       </Button>
