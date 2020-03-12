@@ -14,6 +14,8 @@ import {
 } from './styles'
 import { ISession } from '../../types/session.interface'
 
+const MAX_SESSION_LENGTH = 5999
+
 interface ISessionEditProps {
   onSubmit: (session: ISession) => void
   onClose: () => void
@@ -34,8 +36,11 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     [],
   )
   const onLengthChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      setSessionLength(parseInt(event.target.value, 10)),
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let value = parseInt(event.target.value, 10)
+      value = isNaN(value) ? 0 : value
+      setSessionLength(Math.min(MAX_SESSION_LENGTH, Math.max(0, value)))
+    },
     [],
   )
 
@@ -69,6 +74,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           value={sessionName}
           onChange={onNameChange}
           error={sessionName.length === 0}
+          data-testid="session-name-input"
         />
         <TextField
           id="session-length"
@@ -77,6 +83,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           type="number"
           onChange={onLengthChange}
           error={sessionLength <= 0}
+          data-testid="session-length-input"
         />
       </FormWrapper>
       <PopupControls>

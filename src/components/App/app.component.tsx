@@ -52,6 +52,7 @@ export const App: React.FC<IAppProps> = (props) => {
         <SettingsIcon
           color="#fff"
           onClick={showSettingsCb}
+          data-testid="settings-btn"
         />
       </SettingsIconWrapper>
 
