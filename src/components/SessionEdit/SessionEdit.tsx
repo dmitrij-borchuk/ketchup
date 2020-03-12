@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import shortid from 'shortid'
 import {
@@ -29,8 +29,8 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     session,
     open,
   } = props
-  const [sessionName, setSessionName] = useState<string>(session ? session.name : '')
-  const [sessionLength, setSessionLength] = useState<number>(session ? session.length : 0)
+  const [sessionName, setSessionName] = useState<string>('')
+  const [sessionLength, setSessionLength] = useState<number>(0)
   const onNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSessionName(event.target.value),
     [],
@@ -43,7 +43,6 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     },
     [],
   )
-
   const onSaveClick = useCallback(
     () => {
       onSubmit({
@@ -55,6 +54,12 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     [session, onSubmit, sessionName, sessionLength],
   )
   const title = `${session ? 'Edit' : 'Create'} session`
+  useEffect(() => {
+    if (session) {
+      setSessionLength(session.length)
+      setSessionName(session.name)
+    }
+  }, [session])
 
   return (
     <Popup
@@ -91,6 +96,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           onClick={onSaveClick}
           modifier={Button.MODIFIERS.DARK}
           disabled={sessionName.length === 0 || sessionLength <= 0}
+          data-testid="session-edit-save-btn"
         >
           Save
         </Button>

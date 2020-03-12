@@ -51,7 +51,7 @@ const Session: React.FC<ISessionProps> = ({
 
   return (
     <>
-      <SessionContainer>
+      <SessionContainer data-testid={`session-${name}`}>
         <Flex>
           <div>
             {name}:&nbsp;
@@ -62,10 +62,11 @@ const Session: React.FC<ISessionProps> = ({
         </Flex>
 
         <SessionControls>
-          <IconWrapper disabled={disableRemove}>
+          <IconWrapper>
             <EditIcon
               onClick={onEditClick}
               color="#424242"
+              data-testid="session-edit-btn"
             />
           </IconWrapper>
 
@@ -73,6 +74,7 @@ const Session: React.FC<ISessionProps> = ({
             <DeleteIcon
               onClick={onRemoveClick}
               color="#424242"
+              data-testid="session-delete-btn"
             />
           </IconWrapper>
         </SessionControls>
@@ -255,6 +257,7 @@ const Settings: React.FC<ISettingsProps> = (props) => {
           <Button
             onClick={() => onSaveClick()}
             modifier={Button.MODIFIERS.DARK}
+            data-testid="settings-save-btn"
           >
             Save
           </Button>
