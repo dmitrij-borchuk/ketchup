@@ -28,7 +28,7 @@ export const InputWrapper = styled.div`
   width: 100%;
 `
 interface IIconProps {
-  disabled: boolean
+  disabled?: boolean
 }
 export const IconWrapper = styled.span<IIconProps>`
   ${props => (props.disabled ? 'opacity: 0.3;' : 'cursor: pointer;')}
@@ -40,5 +40,5 @@ export const SessionContainer = styled.div`
 `
 
 export const SessionControls = styled.span`
-
+  margin-left: 20px;
 `
