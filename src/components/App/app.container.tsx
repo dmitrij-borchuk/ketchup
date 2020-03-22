@@ -82,7 +82,7 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
           isRunning: false,
           isFinished: true,
           ...(timerState || {}),
-          seconds: timerSeconds,
+          seconds: timerSeconds >= 0 ? timerSeconds : 0,
         }
         dispatch({
           type: ACTIONS.SET_TIMER_STATE,

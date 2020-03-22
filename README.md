@@ -27,10 +27,6 @@ yarn run storybook
 
 ### Release
 ```
-yarn build
-```
-Commit you build
-```
 yarn version
 git push
 git push --tags

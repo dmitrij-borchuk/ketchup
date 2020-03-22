@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import shortid from 'shortid'
 import {
@@ -14,6 +14,8 @@ import {
 } from './styles'
 import { ISession } from '../../types/session.interface'
 
+const MAX_SESSION_LENGTH = 5999
+
 interface ISessionEditProps {
   onSubmit: (session: ISession) => void
   onClose: () => void
@@ -27,18 +29,20 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     session,
     open,
   } = props
-  const [sessionName, setSessionName] = useState<string>(session ? session.name : '')
-  const [sessionLength, setSessionLength] = useState<number>(session ? session.length : 0)
+  const [sessionName, setSessionName] = useState<string>('')
+  const [sessionLength, setSessionLength] = useState<number>(0)
   const onNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSessionName(event.target.value),
     [],
   )
   const onLengthChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) =>
-      setSessionLength(parseInt(event.target.value, 10)),
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let value = parseInt(event.target.value, 10)
+      value = isNaN(value) ? 0 : value
+      setSessionLength(Math.min(MAX_SESSION_LENGTH, Math.max(0, value)))
+    },
     [],
   )
-
   const onSaveClick = useCallback(
     () => {
       onSubmit({
@@ -50,6 +54,12 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
     [session, onSubmit, sessionName, sessionLength],
   )
   const title = `${session ? 'Edit' : 'Create'} session`
+  useEffect(() => {
+    if (session) {
+      setSessionLength(session.length)
+      setSessionName(session.name)
+    }
+  }, [session])
 
   return (
     <Popup
@@ -69,6 +79,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           value={sessionName}
           onChange={onNameChange}
           error={sessionName.length === 0}
+          data-testid="session-name-input"
         />
         <TextField
           id="session-length"
@@ -77,6 +88,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           type="number"
           onChange={onLengthChange}
           error={sessionLength <= 0}
+          data-testid="session-length-input"
         />
       </FormWrapper>
       <PopupControls>
@@ -84,6 +96,7 @@ export const SessionEdit: React.FC<ISessionEditProps> = (props) => {
           onClick={onSaveClick}
           modifier={Button.MODIFIERS.DARK}
           disabled={sessionName.length === 0 || sessionLength <= 0}
+          data-testid="session-edit-save-btn"
         >
           Save
         </Button>
