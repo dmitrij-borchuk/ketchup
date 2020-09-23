@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "babel-plugin-styled-components": "1.11.1",
-    "customize-cra": "0.9.1"
+    "customize-cra": "1.0.0"
   },
   "husky": {
     "hooks": {
