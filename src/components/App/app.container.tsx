@@ -3,11 +3,7 @@ import shortid from 'shortid'
 import { hot } from 'react-hot-loader'
 import { App } from './app.component'
 import { AppStateContext, ACTIONS, StorageContext, ITimerState } from '../../context'
-import {
-  LOCAL_STORAGE_KEYS,
-  DEFAULT_SESSION_LENGTH,
-  DEFAULT_SESSION_NAME,
-} from '../../constants'
+import { LOCAL_STORAGE_KEYS, DEFAULT_SESSION_LENGTH, DEFAULT_SESSION_NAME } from '../../constants'
 import { ISettings, ISession } from '../../types'
 
 const processSessions = (sessions: ISession[] = []) => {
@@ -25,22 +21,22 @@ const defaultSettings: ISettings = {
   playSound: false,
 }
 
-export interface IAppContainerProps {
-}
+export interface IAppContainerProps {}
 export const AppContainer: React.FC<IAppContainerProps> = () => {
   const { state, dispatch } = useContext(AppStateContext)
-  const { settings: { sessions }, currentSession, timer } = state
+  const {
+    settings: { sessions },
+    currentSession,
+    timer,
+  } = state
   const { endTime, seconds, isFinished, isRunning } = timer
   const { getItem, setItem } = useContext(StorageContext)
-  const showSettings = useCallback(
-    () => {
-      dispatch({
-        type: ACTIONS.SET_SETTINGS_VISIBILITY,
-        payload: true,
-      })
-    },
-    [dispatch],
-  )
+  const showSettings = useCallback(() => {
+    dispatch({
+      type: ACTIONS.SET_SETTINGS_VISIBILITY,
+      payload: true,
+    })
+  }, [dispatch])
   const setCurrentSession = useCallback(
     (session: ISession) => {
       dispatch({
@@ -59,7 +55,7 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
       const timerState = getItem<ITimerState>(LOCAL_STORAGE_KEYS.TIMER_STATE)
       const processedSessions = processSessions(settings.sessions)
       const defaultSession = processedSessions[0]
-      const lastSession = processedSessions.find(ses => ses.id === lastSessionId)
+      const lastSession = processedSessions.find((ses) => ses.id === lastSessionId)
 
       const sessionToSet = lastSession || defaultSession
       dispatch({
@@ -75,12 +71,8 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
       })
       if (timerState) {
         const now = Date.now()
-        const timerSeconds = timerState.isRunning
-        ? Math.round((timerState.endTime - now) / 1000)
-        : timerState.seconds
+        const timerSeconds = timerState.isRunning ? Math.round((timerState.endTime - now) / 1000) : timerState.seconds
         const timerStateToSet = {
-          isRunning: false,
-          isFinished: true,
           ...(timerState || {}),
           seconds: timerSeconds >= 0 ? timerSeconds : 0,
         }
@@ -97,7 +89,6 @@ export const AppContainer: React.FC<IAppContainerProps> = () => {
           payload: sessionToSet.length,
         })
       }
-
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch, getItem],
